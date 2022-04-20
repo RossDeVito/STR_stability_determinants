@@ -1,3 +1,13 @@
+# Project specific
+data/human-references/*
+!data/human-references/README.md 
+data/heterozygosity/*.json
+data/heterozygosity/*.tab
+data/heterozygosity/*.zip
+data/HipSTR-references/*.bed*
+
+prediction/training_output/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

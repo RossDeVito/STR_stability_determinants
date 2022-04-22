@@ -86,18 +86,18 @@ if __name__ == '__main__':
 		samp_fname: name of json file with labeled samples
 		save_dir: path to dir to save output preprocessed samples json
 		this_sample_set_fname: name of output json file. If None, will be
-			'sample_data_dinucleotide_t{stable_max_het}_{unstable_min_het}.json'
-			where {stable_max_het} and {unstable_min_het} are values after
-			the decimal point for the parameters below.
+			'sample_data_dinucleotide_t{stable_minor_freq_max}_{unstable_minor_freq_min}.json'
+			where {stable_minor_freq_max} and {unstable_minor_freq_min} are 
+			values after the decimal point for the parameters below.
 		max_STR_len: maximum length of STR to keep in number of bps.
 		min_num_called: minimum number of samples called to keep STR. If None,
 			keep all STRs.
 		motif_types: Motifs not in this list will be removed. Remember 
 			labeled_samples already includes complements.
-		stable_max_het: Samples with a heterozygosity score <= this will be
-			labeled as 0.
-		unstable_min_het: Samples with a heterozygosity score > this will be
-			labeled as 1.
+		stable_minor_freq_max: Samples with a heterozygosity score <= this 
+			will be labeled as 0.
+		unstable_minor_freq_min: Samples with a heterozygosity score > this 
+			will be labeled as 1.
 	"""
 	samp_dir = os.path.join('..', 'data', 'heterozygosity')
 	samp_fname = 'labeled_samples_dinucleotide.json'
@@ -105,15 +105,16 @@ if __name__ == '__main__':
 	this_sample_set_fname = None
 
 	max_STR_len = 50
-	min_num_called = 1000
+	min_num_called = 2000
 	motif_types = ['GT', 'TG', 'CT', 'TC', 'AC', 'CA', 'AT', 'TA', 'AG', 'GA']
-	stable_max_het = 0.0
-	unstable_min_het = 0.005
+	stable_minor_freq_max = 0.0
+	unstable_minor_freq_min = 0.0025
 
 	if this_sample_set_fname is None:
-		this_sample_set_fname = 'sample_data_dinucleotide_t{:}_{:}.json'.format(
-			str(stable_max_het).split('.')[1],
-			str(unstable_min_het).split('.')[1]
+		this_sample_set_fname = 'sample_data_dinucleotide_mfr{:}_{:}_mnc{:}.json'.format(
+			str(stable_minor_freq_max).split('.')[1],
+			str(unstable_minor_freq_min).split('.')[1],
+			min_num_called
 		)
 
 	# Load labeled STRs to be preprocessed
@@ -142,8 +143,8 @@ if __name__ == '__main__':
 			continue
 
 		# Determine label or if sample should be excluded
-		is_stable = samp_dict['heterozygosity'] <= stable_max_het
-		is_unstable = samp_dict['heterozygosity'] > unstable_min_het
+		is_stable = samp_dict['minor_freq'] <= stable_minor_freq_max
+		is_unstable = samp_dict['minor_freq'] > unstable_minor_freq_min
 		assert not (is_stable and is_unstable)
 
 		if is_stable:
@@ -186,8 +187,8 @@ if __name__ == '__main__':
 	)
 
 	# Plot copy number distribution by split to verify that splits are balanced
-	sns.countplot(x='num_copies', hue='split_1', data=samp_df)
-	plt.show()
+	# sns.countplot(x='num_copies', hue='split_1', data=samp_df)
+	# plt.show()
 	# sns.catplot(x='num_copies', hue='split_1', row='label', data=samp_df,
 	# 	kind='count', aspect=2)
 	# plt.show()

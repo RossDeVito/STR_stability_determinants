@@ -4,10 +4,11 @@ data/human-references/*
 data/heterozygosity/*.json
 data/heterozygosity/*.tab
 data/heterozygosity/*.zip
-data/HipSTR-references/*.bed*
 
 prediction/training_output/*
 prediction/lightning_logs/*
+
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

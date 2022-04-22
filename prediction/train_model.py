@@ -1,3 +1,4 @@
+import argparse
 import os
 import json
 import platform
@@ -11,53 +12,54 @@ import models
 import prepost_models
 
 
-if __name__ == '__main__':
-	__spec__ = None
+DEFAULT_TRAINING_PARAMS = {
+	# Data File
+	'data_dir': os.path.join('..', 'data', 'heterozygosity'),
+	'data_fname': 'sample_data_dinucleotide_t0_005.json',
 
+	# Data Module
+	'batch_size': 512,
+	'min_copy_number': None,
+	'max_copy_number': 9.0,
+	'incl_STR_feat': True,
+	'min_boundary_STR_pos': 6,
+	'max_boundary_STR_pos': 6,
+	'window_size': 128,
+	'bp_dist_units': 128.0,
+	'split_name': 'split_1',
+
+	# Optimizer
+	'lr': 1e-5,
+	'reduce_lr_on_plateau': True,
+	'reduce_lr_factor': 0.1,
+	'lr_reduce_patience': 20,
+	'pos_weight': .8,
+
+	# Callbacks
+	'early_stopping_patience': 40,
+
+	# Model params
+	'model_type': 'InceptionPrePostModel',#'InceptionPreDimRedPost',
+	'depth_fe': 1,
+	'n_filters_fe': 32,
+	'depth_pred': 2,
+	'n_filters_pred': 32,
+	'kernel_sizes': [5, 9, 19],#[5, 9, 19],#[3, 5, 7, 9, 15, 21],#
+	'activation': 'gelu',
+	'dropout': 0.2,
+
+	# # for InceptionPreDimRedPost
+	# 'reduce_to': 16,
+	# 'pool_size': 2,
+	# 'kernel_sizes_pred': [5, 9, 15],
+	# 'dropout_dense': 0.35,
+	# 'dense_layer_sizes': [128, 32],
+}
+
+
+
+def main(training_params):
 	# options
-	training_params = {
-		# Data File
-		'data_dir': os.path.join('..', 'data', 'heterozygosity'),
-		'data_fname': 'sample_data_dinucleotide_t0_005.json',
-
-		# Data Module
-		'batch_size': 512,
-		'min_copy_number': None,
-		'max_copy_number': 9.0,
-		'incl_STR_feat': True,
-		'min_boundary_STR_pos': 6,
-		'max_boundary_STR_pos': 6,
-		'window_size': 128,
-		'bp_dist_units': 128.0,
-		'split_name': 'split_1',
-
-		# Optimizer
-		'lr': 1e-5,
-		'reduce_lr_on_plateau': True,
-		'reduce_lr_factor': 0.1,
-		'lr_reduce_patience': 20,
-		'pos_weight': .8,
-
-		# Callbacks
-		'early_stopping_patience': 40,
-
-		# Model params
-		'model_type': 'InceptionPrePostModel',#'InceptionPreDimRedPost',
-		'depth_fe': 1,
-		'n_filters_fe': 32,
-		'depth_pred': 2,
-		'n_filters_pred': 32,
-		'kernel_sizes': [5, 9, 19],#[5, 9, 19],#[3, 5, 7, 9, 15, 21],#
-		'activation': 'gelu',
-		'dropout': 0.2,
-
-		# # for InceptionPreDimRedPost
-		# 'reduce_to': 16,
-		# 'pool_size': 2,
-		# 'kernel_sizes_pred': [5, 9, 15],
-		# 'dropout_dense': 0.35,
-		# 'dense_layer_sizes': [128, 32],
-	}
 	num_workers_per_loader = 3
 
 	output_dir = 'training_output'
@@ -191,7 +193,24 @@ if __name__ == '__main__':
 
 	# Save results and parameters
 	with open(os.path.join(trainer.logger.log_dir, 'best_val.json'), 'w') as fp:
-		json.dump(best_val, fp)
+		json.dump(best_val, fp, indent=4)
 
 	with open(os.path.join(trainer.logger.log_dir, 'train_params.json'), 'w') as fp:
-		json.dump(training_params, fp)
+		json.dump(training_params, fp, indent=4)
+
+
+if __name__ == '__main__':
+	__spec__ = None
+
+	# Reading training params and run training
+	parser = argparse.ArgumentParser()
+	parser.add_argument('training_params_path', nargs='*')
+	args = parser.parse_args()
+	
+	if len(args.training_params_path) == 0 or len(args.training_params_path) > 1:
+		raise ValueError("Run training script with single arg that is path to training_params JSON")
+	
+	with open(args.training_params_path[0], 'r') as f:
+		training_params = json.load(f)
+
+	main(training_params)

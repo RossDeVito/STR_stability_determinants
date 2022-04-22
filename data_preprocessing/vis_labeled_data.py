@@ -11,8 +11,10 @@ if __name__ == '__main__':
 	samp_dir = os.path.join('..', 'data', 'heterozygosity')
 	samp_fname = 'labeled_samples_dinucleotide.json'
 	samp_path = os.path.join(samp_dir, samp_fname)
+	
 	show_plots = True
 	save_plots = True
+	save_dir = os.path.join('..', 'data', 'heterozygosity', 'plots')
 
 	with open(samp_path) as fp:    
 		samples = json.load(fp)
@@ -23,7 +25,7 @@ if __name__ == '__main__':
 	plt.title('Number of samples called ECDF')
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'num_called_dist.png'))
+		plt.savefig(os.path.join(save_dir, 'num_called_dist.png'))
 	if show_plots:
 		plt.show()
 
@@ -39,7 +41,7 @@ if __name__ == '__main__':
 	plt.title('Heterozygosity Distribtuion (bin width: {:f})'.format(bins[1]-bins[0]))
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'het_dist_bw{:f}.png'.format(bins[1]-bins[0])))
+		plt.savefig(os.path.join(save_dir, 'het_dist_bw{:f}.png'.format(bins[1]-bins[0])))
 	if show_plots:
 		plt.show()
 
@@ -48,7 +50,7 @@ if __name__ == '__main__':
 	plt.title('Heterozygosity Distribtuion (bin width: {:})'.format(bins[1]-bins[0]))
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'het_dist_bw{:}.png'.format(bins[1]-bins[0])))
+		plt.savefig(os.path.join(save_dir, 'het_dist_bw{:}.png'.format(bins[1]-bins[0])))
 	if show_plots:
 		plt.show()
 
@@ -56,7 +58,7 @@ if __name__ == '__main__':
 	plt.title('Heterozygosity Distribtuion ECDF'.format(bins[1]-bins[0]))
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'het_dist_ecdf.png'))
+		plt.savefig(os.path.join(save_dir, 'het_dist_ecdf.png'))
 	if show_plots:
 		plt.show()
 
@@ -67,7 +69,7 @@ if __name__ == '__main__':
 	plt.title('Entropy Distribtuion')
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'ent_dist.png'))
+		plt.savefig(os.path.join(save_dir, 'ent_dist.png'))
 	if show_plots:
 		plt.show()
 
@@ -75,7 +77,7 @@ if __name__ == '__main__':
 	plt.title('Entropy Distribtuion ECDF')
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'ent_dist_ecdf.png'))
+		plt.savefig(os.path.join(save_dir, 'ent_dist_ecdf.png'))
 	if show_plots:
 		plt.show()
 
@@ -86,7 +88,7 @@ if __name__ == '__main__':
 	plt.title('Minor Freq Distribtuion')
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'mfr_dist.png'))
+		plt.savefig(os.path.join(save_dir, 'mfr_dist.png'))
 	if show_plots:
 		plt.show()
 
@@ -94,7 +96,7 @@ if __name__ == '__main__':
 	plt.title('Minor Freq Distribtuion ECDF')
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'mfr_dist_ecdf.png'))
+		plt.savefig(os.path.join(save_dir, 'mfr_dist_ecdf.png'))
 	if show_plots:
 		plt.show()
 
@@ -105,7 +107,7 @@ if __name__ == '__main__':
 	plt.title('Minor Count Distribtuion')
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'mc_dist.png'))
+		plt.savefig(os.path.join(save_dir, 'mc_dist.png'))
 	if show_plots:
 		plt.show()
 
@@ -113,7 +115,7 @@ if __name__ == '__main__':
 	plt.title('Minor Count Distribtuion ECDF')
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'mc_dist_ecdf.png'))
+		plt.savefig(os.path.join(save_dir, 'mc_dist_ecdf.png'))
 	if show_plots:
 		plt.show()
 
@@ -127,7 +129,7 @@ if __name__ == '__main__':
 		bins[1]-bins[0], max_cn))
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'het_dist_bw{:}_maxcn{:}.png'.format(
+		plt.savefig(os.path.join(save_dir, 'het_dist_bw{:}_maxcn{:}.png'.format(
 			bins[1]-bins[0], max_cn)))
 	if show_plots:
 		plt.show()
@@ -136,7 +138,7 @@ if __name__ == '__main__':
 	plt.title('Heterozygosity Distribtuion ECDF (max copy num: {:})'.format(max_cn))
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'het_dist_ecdf_maxcn{:}.png'.format(max_cn)))
+		plt.savefig(os.path.join(save_dir, 'het_dist_ecdf_maxcn{:}.png'.format(max_cn)))
 	if show_plots:
 		plt.show()
 
@@ -146,7 +148,7 @@ if __name__ == '__main__':
 	plt.title('Entropy Distribtuion ECDF (max copy num: {:})'.format(max_cn))
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'ent_dist_ecdf_maxcn{:}.png'.format(max_cn)))
+		plt.savefig(os.path.join(save_dir, 'ent_dist_ecdf_maxcn{:}.png'.format(max_cn)))
 	if show_plots:
 		plt.show()
 
@@ -156,7 +158,7 @@ if __name__ == '__main__':
 	plt.title('Minor Freq Distribtuion ECDF (max copy num: {:})'.format(max_cn))
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'mfr_dist_ecdf_maxcn{:}.png'.format(max_cn)))
+		plt.savefig(os.path.join(save_dir, 'mfr_dist_ecdf_maxcn{:}.png'.format(max_cn)))
 	if show_plots:
 		plt.show()
 
@@ -166,7 +168,7 @@ if __name__ == '__main__':
 	plt.title('Minor Count Distribtuion ECDF (max copy num: {:})'.format(max_cn))
 	plt.tight_layout()
 	if save_plots:
-		plt.savefig(os.path.join(samp_dir, 'mc_dist_ecdf_maxcn{:}.png'.format(max_cn)))
+		plt.savefig(os.path.join(save_dir, 'mc_dist_ecdf_maxcn{:}.png'.format(max_cn)))
 	if show_plots:
 		plt.show()
 

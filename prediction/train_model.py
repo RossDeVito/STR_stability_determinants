@@ -21,7 +21,7 @@ if __name__ == '__main__':
 		'data_fname': 'sample_data_dinucleotide_t0_005.json',
 
 		# Data Module
-		'batch_size': 256,
+		'batch_size': 512,
 		'min_copy_number': None,
 		'max_copy_number': 9.0,
 		'incl_STR_feat': True,
@@ -36,10 +36,10 @@ if __name__ == '__main__':
 		'reduce_lr_on_plateau': True,
 		'reduce_lr_factor': 0.1,
 		'lr_reduce_patience': 20,
-		'pos_weight': None,
+		'pos_weight': .8,
 
 		# Callbacks
-		'early_stopping_patience': 30,
+		'early_stopping_patience': 40,
 
 		# Model params
 		'model_type': 'InceptionPrePostModel',#'InceptionPreDimRedPost',
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 		'n_filters_fe': 32,
 		'depth_pred': 2,
 		'n_filters_pred': 32,
-		'kernel_sizes': [5, 9, 19],#[3, 5, 7, 9, 15, 21],#
+		'kernel_sizes': [5, 9, 19],#[5, 9, 19],#[3, 5, 7, 9, 15, 21],#
 		'activation': 'gelu',
 		'dropout': 0.2,
 
@@ -171,10 +171,10 @@ if __name__ == '__main__':
 			logger=tb_logger,
 			gpus=num_gpus, 
 			log_every_n_steps=1, 
-			max_epochs=3, 
-			limit_train_batches=50,
-			limit_val_batches=50,
-			limit_test_batches=50,
+			# max_epochs=3, 
+			# limit_train_batches=50,
+			# limit_val_batches=50,
+			# limit_test_batches=50,
 			# auto_lr_find=True
 		)
 

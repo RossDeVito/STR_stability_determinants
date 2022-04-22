@@ -12,195 +12,35 @@ import seaborn as sns
 
 if __name__ == '__main__':
 	save_output = True
-	save_desc = 'old_new_ens' # if None will name with timestamp int
+	save_desc = '0_1_3_4_5' # if None will name with timestamp int
 
-	trained_res_dir = '../trained_models/het_cls_v2/round3/V2_1'
-	# trained_res_dir = '../trained_models/het_cls_v2/round3/V2_1_T'
+	trained_res_dir = 'training_output/v1-t0_005-m9_0'
 
-	# models_to_plot = [
-	# 	# {
-	# 	# 	'name': 'version_0',
-	# 	# 	'path': 'version_0',
-	# 	# 	'which_res': 'all' # Default behavior if not 'which_res' in dict is all.
-	# 	# },					   #  Other options are 'best' and 'last'.
-	# 	{
-	# 		'name': 'version_1',
-	# 		'path': 'version_1',
-	# 		'which_res': 'best'
-	# 	},
-	# 	{
-	# 		'name': 'version_2',
-	# 		'path': 'version_2',
-	# 		'which_res': 'best'
-	# 	},
-	# 	# {
-	# 	# 	'name': 'version_3',
-	# 	# 	'path': 'version_3',
-	# 	# 	'which_res': 'best'
-	# 	# },
-	# 	{
-	# 		'name': 'version_4',
-	# 		'path': 'version_4',
-	# 		'which_res': 'best'
-	# 	},
-	# 	# {
-	# 	# 	'name': 'version_6',
-	# 	# 	'path': 'version_6',
-	# 	# 	'which_res': 'best'
-	# 	# },
-	# 	# {
-	# 	# 	'name': 'version_7',
-	# 	# 	'path': 'version_7',
-	# 	# 	'which_res': 'best'
-	# 	# },
-	# 	# {
-	# 	# 	'name': 'version_8',
-	# 	# 	'path': 'version_8',
-	# 	# 	'which_res': 'best'
-	# 	# },
-	# 	# {
-	# 	# 	'name': 'version_9',
-	# 	# 	'path': 'version_9',
-	# 	# 	'which_res': 'best'
-	# 	# },
-	# 	# {
-	# 	# 	'name': 'version_10',
-	# 	# 	'path': 'version_10',
-	# 	# 	'which_res': 'best'
-	# 	# },
-	# 	# {
-	# 	# 	'name': 'version_11',
-	# 	# 	'path': 'version_11',
-	# 	# 	'which_res': 'best'
-	# 	# },
-	# 	# {
-	# 	# 	'name': 'version_12',
-	# 	# 	'path': 'version_12',
-	# 	# 	'which_res': 'best'
-	# 	# },
-	# 	# Ensembles
-	# 	{
-	# 		'name': 'ensemble_v1,2,4',
-	# 		'path': 'ensembles/ens1_v1v2v4',
-	# 		'which_res': 'mean'
-	# 	},
-	# 	# {
-	# 	# 	'name': 'ensemble_v1,2,4',
-	# 	# 	'path': 'ensembles/ens1_v1v2v4',
-	# 	# 	'which_res': 'agree'
-	# 	# },
-	# ]
 	models_to_plot = [
 		{
 			'name': 'version_0',
 			'path': 'version_0',
 			'which_res': 'best'
 		},
-		# {
-		# 	'name': 'version_4',
-		# 	'path': 'version_4',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': 'version_7',
-		# 	'path': 'version_7',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': 'version_8',
-		# 	'path': 'version_8',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': 'version_9',
-		# 	'path': 'version_9',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': 'version_11',
-		# 	'path': 'version_11',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': 'version_12',
-		# 	'path': 'version_12',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': 'version_13',
-		# 	'path': 'version_13',
-		# 	'which_res': 'best'
-		# },
-		# # Ensembles
-		# {
-		# 	'name': 'ensemble_v0,7,8',
-		# 	'path': 'ensembles/ens1_v0v7v8',
-		# 	'which_res': 'mean'
-		# },
-		# {
-		# 	'name': 'ensemble_v0,7,8',
-		# 	'path': 'ensembles/ens1_v0v7v8',
-		# 	'which_res': 'agree'
-		# },
 		{
-			'name': 'ensemble_v0,7,9,12,13',
-			'path': 'ensembles/ens1_v0v7v9v12v13',
-			'which_res': 'mean'
+			'name': 'version_1',
+			'path': 'version_1',
+			'which_res': 'best'
 		},
-		# {
-		# 	'name': 'ensemble_v0,7,9,12,13',
-		# 	'path': 'ensembles/ens1_v0v7v9v12v13',
-		# 	'which_res': 'agree'
-		# },
-		# {
-		# 	'name': '5comb_v0',
-		# 	'path': '../V2_1_AC-AG-AT-CT-GT/version_0',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': '5comb_v1',
-		# 	'path': '../V2_1_AC-AG-AT-CT-GT/version_1',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': '5comb_v2',
-		# 	'path': '../V2_1_AC-AG-AT-CT-GT/version_2',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': '5comb_v3',
-		# 	'path': '../V2_1_AC-AG-AT-CT-GT/version_3',
-		# 	'which_res': 'best'
-		# },
 		{
-			'name': '5comb_v4',
-			'path': '../V2_1_AC-AG-AT-CT-GT/version_4',
-			# 'which_res': 'best'
+			'name': 'version_3',
+			'path': 'version_3',
+			'which_res': 'best'
 		},
-		# {
-		# 	'name': '5comb_v5',
-		# 	'path': '../V2_1_AC-AG-AT-CT-GT/version_5',
-		# 	# 'which_res': 'best'
-		# },
-		# {
-		# 	'name': '5comb_v6',
-		# 	'path': '../V2_1_AC-AG-AT-CT-GT/version_6',
-		# 	# 'which_res': 'best'
-		# },
-		# {
-		# 	'name': '5comb_v7',
-		# 	'path': '../V2_1_AC-AG-AT-CT-GT/version_7',
-		# 	# 'which_res': 'best'
-		# },
-		# {
-		# 	'name': '5comb_v10',
-		# 	'path': '../V2_1_AC-AG-AT-CT-GT/version_10',
-		# 	# 'which_res': 'best'
-		# },
 		{
-			'name': '5comb_ens_v4,6,10',
-			'path': '../V2_1_AC-AG-AT-CT-GT/ensembles/ens1_v4v6v10',
-			'which_res': 'mean'
+			'name': 'version_4',
+			'path': 'version_4',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_5',
+			'path': 'version_5',
+			'which_res': 'best'
 		},
 	]
 
@@ -264,11 +104,11 @@ if __name__ == '__main__':
 	ax_roc.set_xlabel("False Positive Rate")
 	ax_roc.set_ylabel("True Positive Rate")
 	ax_roc.legend(loc='lower right')
-	ax_pr_0.set_title("PR Curve Non-Het")
+	ax_pr_0.set_title("PR Curve Stable")
 	ax_pr_0.set_xlabel("Recall")
 	ax_pr_0.set_ylabel("Precision")
 	ax_pr_0.legend(loc='lower left')
-	ax_pr_1.set_title("PR Curve Het")
+	ax_pr_1.set_title("PR Curve Unstable")
 	ax_pr_1.set_xlabel("Recall")
 	ax_pr_1.set_ylabel("Precision")
 	ax_pr_1.legend(loc='lower left')

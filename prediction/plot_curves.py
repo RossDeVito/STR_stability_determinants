@@ -12,36 +12,40 @@ import seaborn as sns
 
 if __name__ == '__main__':
 	save_output = True
-	save_desc = '0_1_3_4_5' # if None will name with timestamp int
+	save_desc = '0' # if None will name with timestamp int
 
-	trained_res_dir = 'training_output/v1-t0_005-m9_0'
+	trained_res_dir = os.path.join(
+		'training_output',
+		# 'v1-mfr0_005_mnc2000-m6_5',
+		'v1-mfr0_0025_mnc2000-m7_5'
+	)
 
 	models_to_plot = [
 		{
 			'name': 'version_0',
 			'path': 'version_0',
-			'which_res': 'best'
+			'which_res': 'all'
 		},
 		{
-			'name': 'version_1',
-			'path': 'version_1',
+			'name': 'version_0',
+			'path': 'version_0',
 			'which_res': 'best'
 		},
-		{
-			'name': 'version_3',
-			'path': 'version_3',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_4',
-			'path': 'version_4',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_5',
-			'path': 'version_5',
-			'which_res': 'best'
-		},
+		# {
+		# 	'name': 'version_3',
+		# 	'path': 'version_3',
+		# 	'which_res': 'best'
+		# },
+		# {
+		# 	'name': 'version_4',
+		# 	'path': 'version_4',
+		# 	'which_res': 'best'
+		# },
+		# {
+		# 	'name': 'version_5',
+		# 	'path': 'version_5',
+		# 	'which_res': 'best'
+		# },
 	]
 
 	# Load results

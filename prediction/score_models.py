@@ -170,18 +170,18 @@ if __name__ == '__main__':
 		num_gpus = 0
 		print("Running on MacOS, setting num_gpus to 0")
 	else:
-		num_gpus = 1
+		num_gpus = torch.cuda.device_count()
 
 	# General options
 	num_workers_per_loader = 3
 	data_path = os.path.join(
-		'..', 'data', 'heterozygosity', 'sample_data_dinucleotide_t0_005.json'
+		'..', 'data', 'heterozygosity', 'sample_data_dinucleotide_mfr0_005_mnc2000.json'
 	)
 
 	# Select model's output path
 	output_dir = 'training_output'
-	task_version_dir = 'v1-t0_005-m9_0'
-	model_dirs = ['version_5']
+	task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'#'v1-mfr0_005_mnc2000-m6_5'#
+	model_dirs = ['version_0']
 
 	# whether to use best val loss or last epoch
 	use_best_loss = True

@@ -1,9 +1,9 @@
 {
 	"data_dir": "../data/heterozygosity", 
-	"data_fname": "sample_data_dinucleotide_mfr0_0025_mnc2000.json", 
+	"data_fname": "sample_data_dinucleotide_mfr0_005_mnc2000.json", 
 	"batch_size": 512, 
 	"min_copy_number": null, 
-	"max_copy_number": 7.5, 
+	"max_copy_number": 6.5, 
 	"incl_STR_feat": true, 
 	"min_boundary_STR_pos": 6, 
 	"max_boundary_STR_pos": 6, 

@@ -108,7 +108,7 @@ if __name__ == '__main__':
 	min_num_called = 2000
 	motif_types = ['GT', 'TG', 'CT', 'TC', 'AC', 'CA', 'AT', 'TA', 'AG', 'GA']
 	stable_minor_freq_max = 0.0
-	unstable_minor_freq_min = 0.0025
+	unstable_minor_freq_min = 0.005
 
 	if this_sample_set_fname is None:
 		this_sample_set_fname = 'sample_data_dinucleotide_mfr{:}_{:}_mnc{:}.json'.format(

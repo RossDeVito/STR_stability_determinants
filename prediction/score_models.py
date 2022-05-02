@@ -180,8 +180,9 @@ if __name__ == '__main__':
 
 	# Select model's output path
 	output_dir = 'training_output'
-	task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'#'v1-mfr0_005_mnc2000-m6_5'#
-	model_dirs = ['version_0']
+	# task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
+	task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
+	model_dirs = ['version_8', 'version_9']
 
 	# whether to use best val loss or last epoch
 	use_best_loss = True

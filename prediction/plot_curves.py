@@ -12,7 +12,7 @@ import seaborn as sns
 
 if __name__ == '__main__':
 	save_output = True
-	save_desc = '0' # if None will name with timestamp int
+	save_desc = '0_1_2_3_4_5_6_7_8_9' # if None will name with timestamp int
 
 	trained_res_dir = os.path.join(
 		'training_output',
@@ -27,25 +27,50 @@ if __name__ == '__main__':
 			'which_res': 'all'
 		},
 		{
-			'name': 'version_0',
-			'path': 'version_0',
+			'name': 'version_1',
+			'path': 'version_1',
 			'which_res': 'best'
 		},
-		# {
-		# 	'name': 'version_3',
-		# 	'path': 'version_3',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': 'version_4',
-		# 	'path': 'version_4',
-		# 	'which_res': 'best'
-		# },
-		# {
-		# 	'name': 'version_5',
-		# 	'path': 'version_5',
-		# 	'which_res': 'best'
-		# },
+		{
+			'name': 'version_2',
+			'path': 'version_2',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_3',
+			'path': 'version_3',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_4',
+			'path': 'version_4',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_5',
+			'path': 'version_5',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_6',
+			'path': 'version_6',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_7',
+			'path': 'version_7',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_8',
+			'path': 'version_8',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_9',
+			'path': 'version_9',
+			'which_res': 'best'
+		},
 	]
 
 	# Load results

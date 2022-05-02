@@ -22,49 +22,32 @@ if __name__ == '__main__':
 		num_gpus = 0
 		print("Running on MacOS, setting num_gpus to 0")
 	else:
-		num_gpus = 1
+		num_gpus = torch.cuda.device_count()
 
 	# General options
 	num_workers_per_loader = 3
-	motif_type = ['T', 'AC', '5comb'][2]
 	integrated_gradients_batch_size = 1024
 
-	# Select model's output dir
-	if motif_type == 'AC':
-		trained_res_dir = '../trained_models/het_cls_v2/round3/V2_1'
-	elif motif_type == 'T':
-		trained_res_dir = '../trained_models/het_cls_v2/round3/V2_1_T'
-	elif motif_type == '5comb':
-		trained_res_dir = '../trained_models/het_cls_v2/round3/V2_1_AC-AG-AT-CT-GT'
-	else:
-		raise ValueError("Invalid motif_type: {}".format(motif_type))
-	model_dir = 'version_4'
+	# Select model's output path
+	output_dir = 'training_output'
+	# task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
+	task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
+	model_dir = 'version_5'
+	trained_res_dir = os.path.join(output_dir, task_version_dir, model_dir)
 
 	# whether to use best val loss or last epoch
 	use_best_loss = True
 
 	# Load model params
-	with open(os.path.join(trained_res_dir, model_dir, 'train_params.json'), 'r') as f:
+	with open(os.path.join(trained_res_dir, 'train_params.json'), 'r') as f:
 		model_params = json.load(f)
 
 	if 'model_type' not in model_params.keys():
 		model_params['model_type'] = 'InceptionPrePostModel'
 
 	# Load data
-	if motif_type == 'AC':
-		data_path = os.path.join(
-			'..', 'data', 'heterozygosity', 'sample_data_V2_repeat_var.json'
-		)
-	elif motif_type == 'T':
-		data_path = os.path.join(
-			'..', 'data', 'heterozygosity', 'sample_data_T_V2_repeat_var.json'
-		)
-	elif motif_type == '5comb':
-		data_path = os.path.join(
-			'..', 'data', 'heterozygosity', 'sample_data_AC-AG-AT-CT-GT_V2_repeat_var.json'
-		)
 	data_module = STRDataModule(
-		data_path,
+		os.path.join(model_params['data_dir'], model_params['data_fname']),
 		return_data=True, 
 		return_strings=True,
 		split_name=model_params['split_name'],
@@ -118,7 +101,7 @@ if __name__ == '__main__':
 		print(count_params(net))
 
 	# Load model weights
-	saved_weights = os.listdir(os.path.join(trained_res_dir, model_dir, 'checkpoints'))
+	saved_weights = os.listdir(os.path.join(trained_res_dir, 'checkpoints'))
 	if use_best_loss:
 		weights_file = [f for f in saved_weights if 'best_val_loss.ckpt' in f]
 		assert len(weights_file) == 1
@@ -129,7 +112,7 @@ if __name__ == '__main__':
 		weights_file = weights_file[0]
 	
 	weights_path = os.path.join(
-		trained_res_dir, model_dir, 'checkpoints', weights_file
+		trained_res_dir, 'checkpoints', weights_file
 	)
 
 	model = models.STRPrePostClassifier.load_from_checkpoint(
@@ -290,7 +273,7 @@ if __name__ == '__main__':
 				)
 
 	# Save attributions with associated data as pickles
-	res_save_dir = os.path.join(trained_res_dir, model_dir, 'attributions')
+	res_save_dir = os.path.join(trained_res_dir, 'attributions')
 	if not os.path.exists(res_save_dir):
 		os.makedirs(res_save_dir)
 

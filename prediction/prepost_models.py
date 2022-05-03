@@ -85,13 +85,13 @@ class InceptionPrePostModel(PrePostModel):
             ) if depth_fe > 0 else nn.Identity(),
             predictor=ConcatPredictor(
                 cnn_models.InceptionTime(
-                    in_channels=n_filters_fe*(len(kernel_sizes)+1),
+                    in_channels=n_filters_fe*(len(kernel_sizes)+1) if depth_fe > 0 else in_channels,
                     n_filters=n_filters_pred,
                     kernel_sizes=kernel_sizes, 
                     depth=depth_pred,
                     dropout=dropout, 
                     activation=activation,
-                    bottleneck_first=True
+                    bottleneck_first=True if depth_fe > 0 else False
                 )
             )
         )

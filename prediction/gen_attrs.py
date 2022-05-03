@@ -31,8 +31,8 @@ if __name__ == '__main__':
 	# Select model's output path
 	output_dir = 'training_output'
 	# task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
-	task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
-	model_dir = 'version_5'
+	task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
+	model_dir = 'version_12'
 	trained_res_dir = os.path.join(output_dir, task_version_dir, model_dir)
 
 	# whether to use best val loss or last epoch
@@ -155,6 +155,7 @@ if __name__ == '__main__':
 	
 	# Generate attributions with captum
 	if 'train' in data_splits:
+		print("Starting training set")
 		dl = data_module.train_dataloader()
 		for i, batch in tqdm(enumerate(dl), total=len(dl), desc='train set'):
 			if num_gpus > 0:
@@ -194,6 +195,7 @@ if __name__ == '__main__':
 					attr_vals[1].detach().cpu().numpy()
 				)
 	if 'val' in data_splits:
+		print("Starting validation set")
 		dl = data_module.val_dataloader()
 		for i, batch in tqdm(enumerate(dl), total=len(dl), desc='val set'):
 			if num_gpus > 0:
@@ -233,6 +235,7 @@ if __name__ == '__main__':
 					attr_vals[1].detach().cpu().numpy()
 				)
 	if 'test' in data_splits:
+		print("Starting test set")
 		dl = data_module.test_dataloader()
 		for i, batch in tqdm(enumerate(dl), total=len(dl), desc='test set'):
 			if num_gpus > 0:

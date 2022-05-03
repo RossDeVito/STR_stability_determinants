@@ -12,12 +12,13 @@ import seaborn as sns
 
 if __name__ == '__main__':
 	save_output = True
-	save_desc = '0_1_2_3_4_5_6_7_8_9' # if None will name with timestamp int
+	save_desc = '0_1_2_3_4_5_6_7_8_9_10_11_12_13_14' # if None will name with timestamp int
+	# save_desc = '3_4_5_7_9'
 
 	trained_res_dir = os.path.join(
 		'training_output',
-		# 'v1-mfr0_005_mnc2000-m6_5',
-		'v1-mfr0_0025_mnc2000-m7_5'
+		'v1-mfr0_005_mnc2000-m6_5',
+		# 'v1-mfr0_0025_mnc2000-m7_5'
 	)
 
 	models_to_plot = [
@@ -69,6 +70,31 @@ if __name__ == '__main__':
 		{
 			'name': 'version_9',
 			'path': 'version_9',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_10',
+			'path': 'version_10',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_11',
+			'path': 'version_11',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_12',
+			'path': 'version_12',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_13',
+			'path': 'version_13',
+			'which_res': 'best'
+		},
+		{
+			'name': 'version_14',
+			'path': 'version_14',
 			'which_res': 'best'
 		},
 	]

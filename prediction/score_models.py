@@ -175,14 +175,32 @@ if __name__ == '__main__':
 	# General options
 	num_workers_per_loader = 3
 	data_path = os.path.join(
-		'..', 'data', 'heterozygosity', 'sample_data_dinucleotide_mfr0_005_mnc2000.json'
+		'..', 'data', 'heterozygosity', 
+		'sample_data_dinucleotide_mfr0_005_mnc2000.json',
+		# 'sample_data_dinucleotide_mfr0_0025_mnc2000.json'
 	)
 
 	# Select model's output path
 	output_dir = 'training_output'
-	# task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
-	task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
-	model_dirs = ['version_8', 'version_9']
+	task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
+	# task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
+	model_dirs = [
+		# 'version_0',
+		# 'version_1',
+		# 'version_2',
+		# 'version_3',
+		# 'version_4',
+		# 'version_5',
+		# 'version_6',
+		# 'version_7',
+		# 'version_8', 
+		# 'version_9',
+		'version_10',
+		'version_11',
+		'version_12',
+		'version_13',
+		'version_14',
+	]
 
 	# whether to use best val loss or last epoch
 	use_best_loss = True

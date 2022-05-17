@@ -5,8 +5,8 @@
     "min_copy_number": null,
     "max_copy_number": 6.5,
     "incl_STR_feat": true,
-    "min_boundary_STR_pos": 4,
-    "max_boundary_STR_pos": 4,
+    "min_boundary_STR_pos": 6,
+    "max_boundary_STR_pos": 6,
     "window_size": 128,
     "bp_dist_units": 128.0,
     "split_name": "split_1",
@@ -32,7 +32,7 @@
     "dropout": 0.2,
     "dropout_dense": 0.35,
     "dense_layer_sizes": [
-        64,
-        32
+        32,
+        16
     ]
 }

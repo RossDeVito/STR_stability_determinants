@@ -104,11 +104,11 @@ if __name__ == '__main__':
 	save_dir = os.path.join('..', 'data', 'heterozygosity')
 	this_sample_set_fname = None
 
-	max_STR_len = 50
+	max_STR_len = 64
 	min_num_called = 2000
 	motif_types = ['GT', 'TG', 'CT', 'TC', 'AC', 'CA', 'AT', 'TA', 'AG', 'GA']
 	stable_minor_freq_max = 0.0
-	unstable_minor_freq_min = 0.005
+	unstable_minor_freq_min = 0.0
 
 	if this_sample_set_fname is None:
 		this_sample_set_fname = 'sample_data_dinucleotide_mfr{:}_{:}_mnc{:}.json'.format(

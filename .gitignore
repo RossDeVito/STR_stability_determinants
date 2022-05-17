@@ -8,8 +8,16 @@ data/heterozygosity/*.zip
 prediction/training_output/*
 prediction/lightning_logs/*
 
+attr_analysis/attr_data/*
+
+supporting_analysis/homer/fasta_files/*
+supporting_analysis/homer/homer_output/*
+supporting_analysis/pattern_matching/find_patterns_output/*
+
 .DS_Store
+.DS_Store/
 lightning_logs/
+*.fa
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

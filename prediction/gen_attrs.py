@@ -30,9 +30,9 @@ if __name__ == '__main__':
 
 	# Select model's output path
 	output_dir = 'training_output'
-	# task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
-	task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
-	model_dir = 'version_12'
+	task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
+	# task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
+	model_dir = 'version_10'
 	trained_res_dir = os.path.join(output_dir, task_version_dir, model_dir)
 
 	# whether to use best val loss or last epoch
@@ -135,8 +135,8 @@ if __name__ == '__main__':
 		# 'grad_shap': attr.GradientShap(model, multiply_by_inputs=True),
 	}
 	data_splits = [
-		'train',
-		'val',
+		# 'train',
+		# 'val',
 		'test',
 	]
 	attrs_dict = dict()

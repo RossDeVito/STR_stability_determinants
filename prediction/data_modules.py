@@ -1,8 +1,4 @@
-""" Data modules for handle V2 data. Representations of data to be passes
-	to models are now created JIT instead of ahead of time and stored to disk.
-	This should result in much more flexibilty and probably won't be a 
-	bottleneck.
-"""
+""" Data modules for updated data. """
 
 import os
 
@@ -45,12 +41,14 @@ class STRDataset(Dataset):
 			master sheet in addition to the feature matrices, labels, and
 			seqs as strings
 		return_strings (bool): whether to return the sequences as strings
+		return_STR_len (bool): whether to return the length of the STR as float
 	"""
 	def __init__(self, data_file, split_name=None, split_type=None,
 			incl_STR_feat=True, min_boundary_STR_pos=2, max_boundary_STR_pos=2,
 			window_size=128, min_copy_num=None, max_copy_num=None,
 			bp_dist_units=1000.0, as_tensors=True, 
-			return_data=False, return_strings=False, incl_dist_feat=True):
+			return_data=False, return_strings=False, incl_dist_feat=True,
+			return_STR_len=False):
 		"""Inits STRDataset with data_file and desired split or all 
 		data (default).
 		"""
@@ -67,6 +65,7 @@ class STRDataset(Dataset):
 		self.as_tensors = as_tensors
 		self.return_data = return_data
 		self.return_strings = return_strings
+		self.return_STR_len = return_STR_len
 
 		# Load data as DataFrame
 		self.data = pd.read_json(data_file)
@@ -152,18 +151,17 @@ class STRDataset(Dataset):
 		post_STR_seq = (STR_data.str_seq[-num_to_add:]
 						+ STR_data.post_seq[:(self.window_size - num_to_add)])
 
+		ret_dict = {
+			'pre_STR_feats': self.make_feature_matrix(pre_STR_seq, num_to_add, True),
+			'post_STR_feats': self.make_feature_matrix(post_STR_seq, num_to_add, False)
+		}
 		if self.return_strings:
-			return {
-				'pre_STR_seq': pre_STR_seq,
-				'pre_STR_feats': self.make_feature_matrix(pre_STR_seq, num_to_add, True),
-				'post_STR_seq': post_STR_seq,
-				'post_STR_feats': self.make_feature_matrix(post_STR_seq, num_to_add, False)
-			}
-		else:
-			return {
-				'pre_STR_feats': self.make_feature_matrix(pre_STR_seq, num_to_add, True),
-				'post_STR_feats': self.make_feature_matrix(post_STR_seq, num_to_add, False)
-			}
+			ret_dict['pre_STR_seq'] = pre_STR_seq
+			ret_dict['post_STR_seq'] = post_STR_seq
+		if self.return_STR_len:
+			ret_dict['STR_len'] = STR_data.num_copies * STR_data.motif_len
+
+		return ret_dict
 
 	def __getitem__(self, idx):
 		"""Returns a single sample from the dataset.
@@ -205,44 +203,25 @@ def STR_data_collate_fn(batch):
 			'feat_mat': list of feature matrices for samples as tensor
 			'label': list of binary labels for samples as int
 	"""
-	if 'data' in batch[0].keys() and 'pre_STR_seq' in batch[0].keys():
-		return {
-			'data': [sample['data'] for sample in batch],
-			'pre_STR_seq': [sample['pre_STR_seq'] for sample in batch],
-			'post_STR_seq': [sample['post_STR_seq'] for sample in batch],
-			'pre_STR_feats': torch.stack(
+	ret_dict = {
+		'label': torch.tensor([sample['label'] for sample in batch]).long(),
+		'pre_STR_feats': torch.stack(
 				[sample['pre_STR_feats'] for sample in batch]).float(),
-			'post_STR_feats': torch.stack(
+		'post_STR_feats': torch.stack(
 				[sample['post_STR_feats'] for sample in batch]).float(),
-			'label': torch.tensor([sample['label'] for sample in batch]).long()
-		}
-	elif 'data' in batch[0].keys():
-		return {
-			'data': [sample['data'] for sample in batch],
-			'pre_STR_feats': torch.stack(
-				[sample['pre_STR_feats'] for sample in batch]).float(),
-			'post_STR_feats': torch.stack(
-				[sample['post_STR_feats'] for sample in batch]).float(),
-			'label': torch.tensor([sample['label'] for sample in batch]).long()
-		}
-	elif 'pre_STR_seq' in batch[0].keys():
-		return {
-			'pre_STR_seq': [sample['pre_STR_seq'] for sample in batch],
-			'post_STR_seq': [sample['post_STR_seq'] for sample in batch],
-			'pre_STR_feats': torch.stack(
-				[sample['pre_STR_feats'] for sample in batch]).float(),
-			'post_STR_feats': torch.stack(
-				[sample['post_STR_feats'] for sample in batch]).float(),
-			'label': torch.tensor([sample['label'] for sample in batch]).long()
-		}
-	else:
-		return {
-			'pre_STR_feats': torch.stack(
-				[sample['pre_STR_feats'] for sample in batch]).float(),
-			'post_STR_feats': torch.stack(
-				[sample['post_STR_feats'] for sample in batch]).float(),
-			'label': torch.tensor([sample['label'] for sample in batch]).long()
-		}
+	}
+	if 'data' in batch[0].keys():
+		ret_dict['data'] = [sample['data'] for sample in batch]
+
+	if 'pre_STR_seq' in batch[0].keys():
+		ret_dict['pre_STR_seq'] = [sample['pre_STR_seq'] for sample in batch]
+		ret_dict['post_STR_seq'] = [sample['post_STR_seq'] for sample in batch]
+
+	if 'STR_len' in batch[0].keys():
+		ret_dict['STR_len'] = torch.tensor(
+				[sample['STR_len'] for sample in batch]).float()
+
+	return ret_dict
 
 
 class STRDataModule(pl.LightningDataModule):
@@ -258,7 +237,8 @@ class STRDataModule(pl.LightningDataModule):
 			batch_size=32, num_workers=0, shuffle=True,
 			incl_STR_feat=True, min_boundary_STR_pos=2, max_boundary_STR_pos=2,
 			window_size=128, min_copy_num=None, max_copy_num=None,
-			bp_dist_units=1000.0, return_data=False, return_strings=False):
+			bp_dist_units=1000.0, return_data=False, return_strings=False,
+			return_STR_len=False):
 		super().__init__()
 		self.data_file = data_file
 		self.split_name = split_name
@@ -274,6 +254,7 @@ class STRDataModule(pl.LightningDataModule):
 		self.bp_dist_units = bp_dist_units
 		self.return_data = return_data
 		self.return_strings = return_strings
+		self.return_STR_len = return_STR_len
 
 	def setup(self, stage=None):
 		self.train_data = STRDataset(self.data_file, self.split_name, 0,
@@ -281,21 +262,24 @@ class STRDataModule(pl.LightningDataModule):
 			self.max_boundary_STR_pos, self.window_size, self.min_copy_num, 
 			self.max_copy_num, self.bp_dist_units, 
 			return_data=self.return_data,
-			return_strings=self.return_strings
+			return_strings=self.return_strings,
+			return_STR_len=self.return_STR_len
 		)
 		self.val_data = STRDataset(self.data_file, self.split_name, 1,
 			self.incl_STR_feat, self.min_boundary_STR_pos, 
 			self.max_boundary_STR_pos, self.window_size, self.min_copy_num, 
 			self.max_copy_num, self.bp_dist_units,
 			return_data=self.return_data,
-			return_strings=self.return_strings
+			return_strings=self.return_strings,
+			return_STR_len=self.return_STR_len
 		)
 		self.test_data = STRDataset(self.data_file, self.split_name, 2,
 			self.incl_STR_feat, self.min_boundary_STR_pos, 
 			self.max_boundary_STR_pos, self.window_size, self.min_copy_num, 
 			self.max_copy_num, self.bp_dist_units,
 			return_data=self.return_data,
-			return_strings=self.return_strings
+			return_strings=self.return_strings,
+			return_STR_len=self.return_STR_len
 		)
 
 	def train_dataloader(self):
@@ -324,18 +308,18 @@ if __name__ == '__main__':
 
 	# Testing
 	data_path = os.path.join('..', 'data', 'heterozygosity', 
-								'sample_data_V2_repeat_var.json')
+								'sample_data_dinucleotide_mfr0_0_mnc2000.json')
 
-	ds_all_wind = STRDataset(data_path, min_copy_num=7.5, max_copy_num=8.5,)
+	ds_all_wind = STRDataset(data_path, min_copy_num=6, max_copy_num=6.5,)
 	# ds_0 = STRDataset(data_path, 'split_1', split_type=0)
 	ds_1 = STRDataset(data_path, 'split_1', split_type=0, max_copy_num=15)
 
 	data_mod = STRDataModule(data_path, 'split_1', num_workers=1, 
-		min_boundary_STR_pos=4,
+		min_boundary_STR_pos=6,
 		max_boundary_STR_pos=6,
-		max_copy_num=15,
-		bp_dist_units=None,
-		incl_STR_feat=False
+		max_copy_num=6.5,
+		bp_dist_units=100,
+		incl_STR_feat=True
 	)
 	data_mod.setup()
 	train_dataloader = data_mod.train_dataloader()

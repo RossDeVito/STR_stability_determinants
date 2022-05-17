@@ -439,6 +439,37 @@ class InceptionTime(nn.Module):
 		return x
 
 
+class InceptionTimeBase(nn.Module):
+	"""InceptionTime w/o classifier """
+	def __init__(self, in_channels=7, output_dim=1, 
+					kernel_sizes=[9, 19, 39], n_filters=32,
+					dropout=.3, activation='relu',
+					**kwargs):
+		super().__init__()
+		self.in_channels = in_channels
+		self.output_dim = output_dim
+		self.kernel_sizes = kernel_sizes
+		self.n_filters = n_filters
+		self.dropout = dropout
+		self.activation = activation
+		
+		self.inception_block = InceptionBlock(
+			in_channels=self.in_channels,
+			kernel_sizes=self.kernel_sizes,
+			n_filters=self.n_filters,
+			dropout=self.dropout,
+			activation=self.activation,
+			**kwargs
+		)
+		self.global_pool = nn.AdaptiveMaxPool1d(1)
+		self.flatten = nn.Flatten()
+
+	def forward(self, x):
+		x = self.inception_block(x)
+		x = self.flatten(self.global_pool(x))
+		return x
+
+
 # Attention pooling from https://github.com/boxiangliu/enformer-pytorch
 class AttentionPool(nn.Module):
     def __init__(self, dim, pool_size = 2):

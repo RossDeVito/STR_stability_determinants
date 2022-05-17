@@ -26,6 +26,16 @@ class PrePostModel(nn.Module):
         x_post = self.feature_extractor(post_seq)
         return self.predictor(x_pre, x_post)
 
+
+class PrePostModelSTRLen(PrePostModel):
+    def __init__(self, feature_extractor, predictor):
+        super(PrePostModelSTRLen, self).__init__(feature_extractor, predictor)
+
+    def forward(self, pre_seq, post_seq, str_len):
+        x_pre = self.feature_extractor(pre_seq)
+        x_post = self.feature_extractor(post_seq)
+        return self.predictor(x_pre, x_post, str_len)
+
         
 class ConcatPredictor(nn.Module):
     """ Predictor which concatenates pre and post embeddings on last 
@@ -41,6 +51,19 @@ class ConcatPredictor(nn.Module):
 
     def forward(self, pre_embed, post_embed):
         x = torch.cat((pre_embed, post_embed), dim=-1)
+        return self.predictor(x)
+
+class ConcatPredictorSTRLen(nn.Module):
+    """ Above, but does seq flattening, then concats len, then passes to predictor. """
+    def __init__(self, seq_flattener, predictor):
+        super(ConcatPredictorSTRLen, self).__init__()
+        self.seq_flattener = seq_flattener
+        self.predictor = predictor
+
+    def forward(self, pre_embed, post_embed, str_len):
+        x = torch.cat((pre_embed, post_embed), dim=-1)
+        x = self.seq_flattener(x)
+        x = torch.cat((x, str_len.reshape(str_len.shape[0], -1)), dim=-1)
         return self.predictor(x)
 
 
@@ -83,7 +106,7 @@ class InceptionPrePostModel(PrePostModel):
                 dropout=dropout, 
                 activation=activation
             ) if depth_fe > 0 else nn.Identity(),
-            predictor=ConcatPredictor(
+            predictor=ConcatPredictorSTRLen(
                 cnn_models.InceptionTime(
                     in_channels=n_filters_fe*(len(kernel_sizes)+1) if depth_fe > 0 else in_channels,
                     n_filters=n_filters_pred,
@@ -92,6 +115,42 @@ class InceptionPrePostModel(PrePostModel):
                     dropout=dropout, 
                     activation=activation,
                     bottleneck_first=True if depth_fe > 0 else False
+                )
+            )
+        )
+
+
+class InceptionPrePostModelSTRLen(PrePostModelSTRLen):
+    """ Uses Inception type CNN for both parts of PrePostModel. """
+    def __init__(self, in_channels=5, output_dim=1, depth_fe=4, depth_pred=2,
+                    kernel_sizes=[9, 19, 39], n_filters_fe=32, 
+                    n_filters_pred=32, dropout=0.3,
+                    activation='relu', dense_layers=[32, 16],
+                    dense_dropout=0.3,):
+        super(InceptionPrePostModelSTRLen, self).__init__(
+            feature_extractor=cnn_models.InceptionBlock(
+                in_channels=in_channels, 
+                n_filters=n_filters_fe,
+                kernel_sizes=kernel_sizes, 
+                depth=depth_fe,
+                dropout=dropout, 
+                activation=activation
+            ) if depth_fe > 0 else nn.Identity(),
+            predictor=ConcatPredictorSTRLen(
+                cnn_models.InceptionTimeBase(
+                    in_channels=n_filters_fe*(len(kernel_sizes)+1) if depth_fe > 0 else in_channels,
+                    n_filters=n_filters_pred,
+                    kernel_sizes=kernel_sizes, 
+                    depth=depth_pred,
+                    dropout=dropout, 
+                    activation=activation,
+                    bottleneck_first=True if depth_fe > 0 else False
+                ),
+                DenseNet(
+                    n_filters_pred*(len(kernel_sizes)+1) + 1,
+                    dense_layers,
+                    1,
+                    dense_dropout
                 )
             )
         )
@@ -207,23 +266,25 @@ if __name__ == '__main__':
 
     X1 = torch.rand(8, 6, training_params['window_size'])
     X2 = torch.rand(8, 6, training_params['window_size'])
+    STR_lens = torch.rand(8, 1)
 
-    model = InceptionPreDimRedPost(n_per_side=64, reduce_to=16, in_channels=6,)
-    net = InceptionPreDimRedPost(
-			n_per_side=training_params['window_size'],
-			reduce_to=training_params['reduce_to'],
-			in_channels=6,
-			depth_fe=training_params['depth_fe'],
-			pool_size=training_params['pool_size'],
-			n_filters_fe=training_params['n_filters_fe'],
-			kernel_sizes_fe=training_params['kernel_sizes'],
-			kernel_sizes_pred=training_params['kernel_sizes_pred'],
-			n_filters_pred=training_params['n_filters_pred'],
-			activation=training_params['activation'],
-			dropout_cnn=training_params['dropout'],
-			dropout_dense=training_params['dropout_dense'],
-			dense_layer_sizes=training_params['dense_layer_sizes']
-		)
+    # model = InceptionPreDimRedPost(n_per_side=64, reduce_to=16, in_channels=6,)
+    # net = InceptionPreDimRedPost(
+	# 		n_per_side=training_params['window_size'],
+	# 		reduce_to=training_params['reduce_to'],
+	# 		in_channels=6,
+	# 		depth_fe=training_params['depth_fe'],
+	# 		pool_size=training_params['pool_size'],
+	# 		n_filters_fe=training_params['n_filters_fe'],
+	# 		kernel_sizes_fe=training_params['kernel_sizes'],
+	# 		kernel_sizes_pred=training_params['kernel_sizes_pred'],
+	# 		n_filters_pred=training_params['n_filters_pred'],
+	# 		activation=training_params['activation'],
+	# 		dropout_cnn=training_params['dropout'],
+	# 		dropout_dense=training_params['dropout_dense'],
+	# 		dense_layer_sizes=training_params['dense_layer_sizes']
+	# 	)
+    net = InceptionPrePostModelSTRLen(in_channels=6)
 
-    out = model(X1, X2)
-    nout = net(X1, X2)
+    out = net(X1, X2, STR_lens)
+    # nout = net(X1, X2)

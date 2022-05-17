@@ -144,27 +144,40 @@ class STRPrePostClassifier(pl.LightningModule):
 			return torch.optim.Adam(params, lr=self.learning_rate)
 
 
-class basic_CNN(nn.Module):
-	def __init__(self, seq_len, n_channels=7, output_dim=1):
-		super().__init__()
-		self.conv1 = nn.Conv1d(input_dim, out_channels, 15)
-		self.relu1 = nn.ReLU()
-		self.dropout1 = nn.Dropout(p=dropout)
-		self.conv2 = nn.Conv1d(out_channels, out_channels, 15)
-		self.relu2 = nn.ReLU()
-		self.dropout2 = nn.Dropout(p=dropout)
-		self.conv3 = nn.Conv1d(out_channels, out_channels, 15)
-		self.relu3 = nn.ReLU()
-		self.dropout3 = nn.Dropout(p=dropout)
-		self.classifier = nn.Linear(out_channels, 1)
+class STRPrePostClassifierSTRLen(STRPrePostClassifier):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
 
-	def forward(self, x):
-		x = self.dropout1(self.relu1(self.conv1(x)))
-		x = self.dropout2(self.relu2(self.conv2(x)))
-		x = self.dropout3(self.relu3(self.conv3(x)))
-		x = torch.max(x, axis=2).values
-		return self.classifier(x)
+	def forward(self, x_pre, x_post, str_len):
+		return torch.sigmoid(self.model(x_pre, x_post, str_len))
 
+	def shared_step(self, batch):
+		x_pre = batch['pre_STR_feats']
+		x_post = batch['post_STR_feats']
+		str_len = batch['STR_len']
+
+		y = batch['label']
+		logits = self.model(x_pre, x_post, str_len)
+
+		if self.pos_weight is not None:
+			weight = torch.tensor([self.pos_weight], device=self.device)
+		else:
+			weight = self.pos_weight
+
+		loss = F.binary_cross_entropy_with_logits(
+			logits, y.unsqueeze(1).float(), weight=weight
+		)
+		return loss, logits, y
+
+	def predict_step(self, batch, batch_idx: int, dataloader_idx: int = None):
+		return {
+			'y_hat': self(
+				batch['pre_STR_feats'], 
+				batch['post_STR_feats'], 
+				batch['STR_len']).flatten(), 
+			'y_true': batch['label']
+		}
+		
 
 class FlattenDenseNet(nn.Module):
 	def __init__(self, input_len, input_num_channels, layer_sizes, 

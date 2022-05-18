@@ -39,7 +39,8 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 		window_size=model_params['window_size'],
 		min_copy_num=model_params['min_copy_number'],
 		max_copy_num=model_params['max_copy_number'],
-		bp_dist_units=model_params['bp_dist_units']
+		bp_dist_units=model_params['bp_dist_units'],
+		return_STR_len='_STR_len' in model_params['model_type']
 	)
 	data_module.setup()
 
@@ -71,6 +72,19 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 			dropout_dense=model_params['dropout_dense'],
 			dense_layer_sizes=model_params['dense_layer_sizes']
 		)
+	elif model_params['model_type'] == 'InceptionPrePostModel_STR_len':
+		net = prepost_models.InceptionPrePostModelSTRLen(
+			in_channels=data_module.num_feat_channels(),
+			depth_fe=model_params['depth_fe'],
+			n_filters_fe=model_params['n_filters_fe'],
+			depth_pred=model_params['depth_pred'],
+			n_filters_pred=model_params['n_filters_pred'],
+			kernel_sizes=model_params['kernel_sizes'],
+			activation=model_params['activation'],
+			dropout=model_params['dropout'],
+			dense_dropout=model_params['dropout_dense'],
+			dense_layers=model_params['dense_layer_sizes']
+		)
 	else:
 		raise ValueError("Unknown model type: {}".format(model_params['model_type']))
 	
@@ -97,10 +111,16 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 		output_dir, task_version_dir, model_dir, 'checkpoints', weights_file
 	)
 
-	model = models.STRPrePostClassifier.load_from_checkpoint(
-		weights_path,
-		model=net,
-	)
+	if '_STR_len' not in model_params['model_type']:
+		model = models.STRPrePostClassifier.load_from_checkpoint(
+			weights_path,
+			model=net,
+		)
+	else:
+		model = models.STRPrePostClassifierSTRLen.load_from_checkpoint(
+			weights_path,
+			model=net,
+		)
 
 	# Metrics
 	metrics = MetricCollection({
@@ -195,11 +215,13 @@ if __name__ == '__main__':
 		# 'version_7',
 		# 'version_8', 
 		# 'version_9',
-		'version_10',
-		'version_11',
-		'version_12',
-		'version_13',
-		'version_14',
+		# 'version_10',
+		# 'version_11',
+		# 'version_12',
+		# 'version_13',
+		# 'version_14',
+		'version_20',
+		'version_21'
 	]
 
 	# whether to use best val loss or last epoch

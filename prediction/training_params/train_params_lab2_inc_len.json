@@ -28,11 +28,12 @@
         13,
         19
     ],
-    "activation": "gelu",
+    "activation": "relu",
     "dropout": 0.2,
     "dropout_dense": 0.35,
     "dense_layer_sizes": [
+        64,
         32,
-        16
+        32
     ]
 }

@@ -49,16 +49,22 @@ def plot_heatmap(pre_mat, post_mat, pre_str, post_str,
 
 def plot_heatmap_in_axs(pre_mat, post_mat, axs, 
 		pre_str=None, post_str=None, desc=None, label=None, 
-		pred=None, cmap='PRGn'):
+		pred=None, cmap='PRGn', just_bases=False):
 	max_attr = max(pre_mat.max(), post_mat.max())
 	min_attr = min(pre_mat.min(), post_mat.min())
 
+	if just_bases:
+		pre_mat = pre_mat[:4]
+		post_mat = post_mat[:4]
+		y_ticklabels = ['A', 'C', 'G', 'T']
+	else:
+		y_ticklabels = ['A', 'C', 'G', 'T', 'distance', 'is_STR']
 	sns.heatmap(
 		data=pre_mat,
 		vmin=min_attr,
 		vmax=max_attr,
 		center=0,
-		yticklabels=['A', 'C', 'G', 'T', 'distance', 'is_STR'],
+		yticklabels=y_ticklabels,
 		xticklabels=[],
 		ax=axs[0],
 		cmap=cmap,
@@ -69,7 +75,7 @@ def plot_heatmap_in_axs(pre_mat, post_mat, axs,
 		vmin=min_attr,
 		vmax=max_attr,
 		center=0,
-		yticklabels=['A', 'C', 'G', 'T', 'distance', 'is_STR'],
+		yticklabels=y_ticklabels,
 		xticklabels=[],
 		ax=axs[1],
 		cmap=cmap,
@@ -146,6 +152,7 @@ if __name__ == '__main__':
 	str_pad_size = 6
 
 	test_only = True
+	just_bases = True
 
 	num_cpus = 10
 
@@ -209,7 +216,8 @@ if __name__ == '__main__':
 				subset_data['pre'][ind],
 				subset_data['post'][ind],
 				axs[plot_ind],
-				ind
+				ind,
+				just_bases=just_bases
 			)
 		fig.suptitle(
 			'Top {} TPs for motif {}'.format(top_n, motif),
@@ -266,6 +274,10 @@ if __name__ == '__main__':
 			size='xx-large')
 		plt.tight_layout()
 	
+		top_n = str(top_n)
+		if just_bases:
+			top_n += '_bases'
+			
 		if save_plots:
 			if test_only:
 				plt.savefig(

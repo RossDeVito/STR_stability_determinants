@@ -53,99 +53,99 @@ if __name__ == '__main__':
 		method='fdr_bh'
 	)[1]
 
-	# Make plots
-	fig, axs = plt.subplots(
-		len(max_STR_lens), len(to_plot), sharey=True, squeeze=False
-	)
-	for ax in axs.flatten():
-		ax.grid(axis='y', zorder=0)
+	# # Make plots
+	# fig, axs = plt.subplots(
+	# 	len(max_STR_lens), len(to_plot), sharey=True, squeeze=False
+	# )
+	# for ax in axs.flatten():
+	# 	ax.grid(axis='y', zorder=0)
 
-	for row_idx, max_STR_len in enumerate(max_STR_lens):
-		# Reduce df
-		max_len_df = df[df['max_str_len'] == max_STR_len]
+	# for row_idx, max_STR_len in enumerate(max_STR_lens):
+	# 	# Reduce df
+	# 	max_len_df = df[df['max_str_len'] == max_STR_len]
 
-		for col_idx,plot_type in enumerate(to_plot):
-			reduced_df = max_len_df[max_len_df['correlation type'] == plot_type]
-			rows_by_feat = []
+	# 	for col_idx,plot_type in enumerate(to_plot):
+	# 		reduced_df = max_len_df[max_len_df['correlation type'] == plot_type]
+	# 		rows_by_feat = []
 
-			for feat_name, feat_options in feats_to_plot:
-				if 'is_STR_len' in feat_options:
-					feat_df = reduced_df[reduced_df['feature'] == 'STR len.']
-				else:
-					feat_df = reduced_df[
-						(reduced_df['case'] == feat_options['case'])
-						& (reduced_df['d'] == feat_options['d'])
-						& (reduced_df['agg_method'] == feat_options['agg_method'])
-						& (reduced_df['feature'] == 'num. bases')
-					]
-				feat_df['Feature'] = feat_name
-				rows_by_feat.append(feat_df)
+	# 		for feat_name, feat_options in feats_to_plot:
+	# 			if 'is_STR_len' in feat_options:
+	# 				feat_df = reduced_df[reduced_df['feature'] == 'STR len.']
+	# 			else:
+	# 				feat_df = reduced_df[
+	# 					(reduced_df['case'] == feat_options['case'])
+	# 					& (reduced_df['d'] == feat_options['d'])
+	# 					& (reduced_df['agg_method'] == feat_options['agg_method'])
+	# 					& (reduced_df['feature'] == 'num. bases')
+	# 				]
+	# 			feat_df['Feature'] = feat_name
+	# 			rows_by_feat.append(feat_df)
 			
-			reduced_df = pd.concat(rows_by_feat)
-			reduced_df = reduced_df.rename(columns={
-				'correlation': 'Correlation',
-				'motif': 'Motif Type'
-			})
+	# 		reduced_df = pd.concat(rows_by_feat)
+	# 		reduced_df = reduced_df.rename(columns={
+	# 			'correlation': 'Correlation',
+	# 			'motif': 'Motif Type'
+	# 		})
 			
-			bar = sns.barplot(
-				x='Feature',
-				y='Correlation',
-				hue='Motif Type',
-				hue_order=all_motif_types,
-				data=reduced_df,
-				ax=axs[row_idx, col_idx],
-				zorder=3
-			)
+	# 		bar = sns.barplot(
+	# 			x='Feature',
+	# 			y='Correlation',
+	# 			hue='Motif Type',
+	# 			hue_order=all_motif_types,
+	# 			data=reduced_df,
+	# 			ax=axs[row_idx, col_idx],
+	# 			zorder=3
+	# 		)
 
-			# change shading for insignificant correlations
-			insignif_corr_vals = reduced_df[
-				reduced_df['p-value bonferroni'] > p_val_threshold
-			].Correlation.values
+	# 		# change shading for insignificant correlations
+	# 		insignif_corr_vals = reduced_df[
+	# 			reduced_df['p-value bonferroni'] > p_val_threshold
+	# 		].Correlation.values
 
-			for j,this_bar in enumerate(bar.patches):
-				if this_bar.get_height() in insignif_corr_vals:
-					fill_color = bar.patches[j].get_facecolor()
-					bar.patches[j].set_edgecolor(fill_color)
-					bar.patches[j].set_facecolor("none")
-					bar.patches[j].set_hatch('/////')
+	# 		for j,this_bar in enumerate(bar.patches):
+	# 			if this_bar.get_height() in insignif_corr_vals:
+	# 				fill_color = bar.patches[j].get_facecolor()
+	# 				bar.patches[j].set_edgecolor(fill_color)
+	# 				bar.patches[j].set_facecolor("none")
+	# 				bar.patches[j].set_hatch('/////')
 
-			# tweak labels and such
-			if col_idx == 0:
-				bar.set_ylabel('max STR len. = {}'.format(max_STR_len))
-			else:
-				bar.set_ylabel(None)
+	# 		# tweak labels and such
+	# 		if col_idx == 0:
+	# 			bar.set_ylabel('max STR len. = {}'.format(max_STR_len))
+	# 		else:
+	# 			bar.set_ylabel(None)
 
-			if row_idx == 0:
-				bar.set_title(plot_type.title())
+	# 		if row_idx == 0:
+	# 			bar.set_title(plot_type.title())
 
-			if row_idx != len(max_STR_lens) - 1:
-				bar.set_xticklabels([])
+	# 		if row_idx != len(max_STR_lens) - 1:
+	# 			bar.set_xticklabels([])
 
-			bar.set_xlabel(None)
-			bar.axhline(y=0, color='gray', linestyle='-', lw=.5)			
+	# 		bar.set_xlabel(None)
+	# 		bar.axhline(y=0, color='gray', linestyle='-', lw=.5)			
 
-	for i,ax in enumerate(axs.flatten()):
-		ax.xaxis.set_tick_params(labelbottom=True)
-		ax.yaxis.set_tick_params(labelleft=True)
-		# ax.set_xticklabels(ax.get_xticklabels(), rotation=10, ha='right', rotation_mode='anchor')
+	# for i,ax in enumerate(axs.flatten()):
+	# 	ax.xaxis.set_tick_params(labelbottom=True)
+	# 	ax.yaxis.set_tick_params(labelleft=True)
+	# 	# ax.set_xticklabels(ax.get_xticklabels(), rotation=10, ha='right', rotation_mode='anchor')
 
-		# remove duplicate legends
-		if i == 0:
-			sns.move_legend(
-				ax,
-				'upper right',
-				# bbox_to_anchor=(.5, .99), 
-				ncol=len(all_motif_types) // 2,
-				# title=None,
-				frameon=True,
-			)
-		else:
-			ax.legend([],[], frameon=False)
+	# 	# remove duplicate legends
+	# 	if i == 0:
+	# 		sns.move_legend(
+	# 			ax,
+	# 			'upper right',
+	# 			# bbox_to_anchor=(.5, .99), 
+	# 			ncol=len(all_motif_types) // 2,
+	# 			# title=None,
+	# 			frameon=True,
+	# 		)
+	# 	else:
+	# 		ax.legend([],[], frameon=False)
 
 		
 
-	fig.supylabel('Correlation')
-	fig.supxlabel('Features')
-	fig.suptitle('STR Stability Correlations')
+	# fig.supylabel('Correlation')
+	# fig.supxlabel('Features')
+	# fig.suptitle('STR Stability Correlations')
 
-	plt.show()
+	# plt.show()

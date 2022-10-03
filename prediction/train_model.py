@@ -72,11 +72,13 @@ def main(training_params):
 			str(training_params['max_copy_number']).replace('.', '_')
 		)
 
-	if platform.system() == 'Darwin':
-		num_gpus = 0
-		print("Running on MacOS, setting num_gpus to 0")
-	else:
-		num_gpus = 1
+	# if platform.system() == 'Darwin':
+	# 	num_gpus = 0
+	# 	print("Running on MacOS, setting num_gpus to 0")
+	# 	if 'mac' in platform_info.lower() and 'arm' in platform_info.lower():
+	# 		num_gpus = None
+	# else:
+	# 	num_gpus = 1
 
 	# resuming from checkpoint
 	from_checkpoint = False
@@ -197,7 +199,9 @@ def main(training_params):
 		trainer = pl.Trainer(
 			callbacks=callbacks,
 			logger=tb_logger,
-			gpus=num_gpus, 
+			# gpus=num_gpus, 
+			devices='auto',
+			accelerator='auto',
 			log_every_n_steps=1, 
 			# max_epochs=3, 
 			# limit_train_batches=50,

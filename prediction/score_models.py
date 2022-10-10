@@ -9,7 +9,9 @@ import pandas as pd
 import torch
 import pytorch_lightning as pl
 from torchmetrics import MetricCollection
-from torchmetrics import ConfusionMatrix, Precision, Recall, F1, PrecisionRecallCurve
+from torchmetrics import (
+	ConfusionMatrix, Precision, Recall, F1Score, PrecisionRecallCurve
+)
 from sklearn.metrics import roc_curve, auc, precision_recall_curve
 
 from model_utils import count_params
@@ -46,6 +48,9 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 
 	# Create model
 	if model_params['model_type'] == 'InceptionPrePostModel':
+		kwargs = {}
+		if 'pool_type' in model_params:
+			kwargs['pool_type'] = model_params['pool_type']
 		net = prepost_models.InceptionPrePostModel(
 			in_channels=data_module.num_feat_channels(),
 			depth_fe=model_params['depth_fe'],
@@ -54,7 +59,8 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 			n_filters_pred=model_params['n_filters_pred'],
 			kernel_sizes=model_params['kernel_sizes'],
 			activation=model_params['activation'],
-			dropout=model_params['dropout']
+			dropout=model_params['dropout'],
+			**kwargs
 		)
 	elif model_params['model_type'] == 'InceptionPreDimRedPost':
 		net = prepost_models.InceptionPreDimRedPost(
@@ -128,8 +134,8 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 		'class_precision': Precision(num_classes=2, average='none', multiclass=True),
 		'macro_recall': Recall(num_classes=2, average='macro', multiclass=True),
 		'class_recall': Recall(num_classes=2, average='none', multiclass=True),
-		'macro_F1': F1(num_classes=2, average='macro', multiclass=True),
-		'class_F1': F1(num_classes=2, average='none', multiclass=True),
+		'macro_F1': F1Score(num_classes=2, average='macro', multiclass=True),
+		'class_F1': F1Score(num_classes=2, average='none', multiclass=True),
 		'confusion_matrix': ConfusionMatrix(num_classes=2)
 	})
 
@@ -205,6 +211,7 @@ if __name__ == '__main__':
 	task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
 	# task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
 	model_dirs = [
+		'tscc_version_10',
 		# 'version_0',
 		# 'version_1',
 		# 'version_2',
@@ -220,8 +227,8 @@ if __name__ == '__main__':
 		# 'version_12',
 		# 'version_13',
 		# 'version_14',
-		'version_20',
-		'version_21'
+		# 'version_20',
+		# 'version_21'
 	]
 
 	# whether to use best val loss or last epoch

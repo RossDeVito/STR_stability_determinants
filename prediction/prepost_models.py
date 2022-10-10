@@ -96,7 +96,7 @@ class InceptionPrePostModel(PrePostModel):
     def __init__(self, in_channels=5, output_dim=1, depth_fe=4, depth_pred=2,
                     kernel_sizes=[9, 19, 39], n_filters_fe=32, 
                     n_filters_pred=32, dropout=0.3,
-                    activation='relu'):
+                    activation='relu', pool_type='max'):
         super(InceptionPrePostModel, self).__init__(
             feature_extractor=cnn_models.InceptionBlock(
                 in_channels=in_channels, 
@@ -114,7 +114,8 @@ class InceptionPrePostModel(PrePostModel):
                     depth=depth_pred,
                     dropout=dropout, 
                     activation=activation,
-                    bottleneck_first=True if depth_fe > 0 else False
+                    bottleneck_first=True if depth_fe > 0 else False,
+					pool_type=pool_type
                 )
             )
         )

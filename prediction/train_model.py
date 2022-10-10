@@ -106,6 +106,9 @@ def main(training_params):
 
 	# Create model
 	if training_params['model_type'] == 'InceptionPrePostModel':
+		kwargs = {}
+		if 'pool_type' in training_params:
+			kwargs['pool_type'] = training_params['pool_type']
 		net = prepost_models.InceptionPrePostModel(
 			in_channels=data_module.num_feat_channels(),
 			depth_fe=training_params['depth_fe'],
@@ -114,7 +117,8 @@ def main(training_params):
 			n_filters_pred=training_params['n_filters_pred'],
 			kernel_sizes=training_params['kernel_sizes'],
 			activation=training_params['activation'],
-			dropout=training_params['dropout']
+			dropout=training_params['dropout'],
+			**kwargs
 		)
 	elif training_params['model_type'] == 'InceptionPreDimRedPost':
 		net = prepost_models.InceptionPreDimRedPost(

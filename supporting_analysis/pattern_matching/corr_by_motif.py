@@ -202,7 +202,7 @@ if __name__ == '__main__':
 	# Options
 	label_version_dir = os.path.join(
 		'find_patterns_output',
-		'mfr0_005_mnc2000-m50',
+		'mfr0_005_mnc2000-m64',
 		# 'mfr0_0025_mnc2000-m50',
 		# 'mfr0_0_mnc2000-m64'
 	)
@@ -213,7 +213,7 @@ if __name__ == '__main__':
 	# max_str_lens = [12, 13, 14, 15, 20]#, 35, 50, 64]
 	max_str_lens = [13, 15, 20, 25]
 	agg_methods = ['sum']
-	continuous_labels = ['heterozygosity']#, 'entropy', 'minor_freq']
+	continuous_labels = ['heterozygosity', 'entropy', 'minor_freq']
 
 	do_plots = False
 	inc_complements = True

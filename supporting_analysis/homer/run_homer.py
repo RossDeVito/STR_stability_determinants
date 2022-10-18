@@ -21,7 +21,7 @@ def make_HOMER_cmd(fasta_fname, background_fasta_fname, output_dir,
 
 if __name__ == '__main__':
 	# Options
-	label_version_dir = 'mfr0_005_w15_cn0'
+	label_version_dir = 'mfr0_005_w64_cn0_both_flanks'
 	fasta_dir = os.path.join('fasta_files', label_version_dir)
 	num_cpus = 10
 	motif_lens = [4,5,6,7,8,9,10,11,12]

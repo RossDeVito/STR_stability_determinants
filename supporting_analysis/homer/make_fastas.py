@@ -13,7 +13,7 @@ def sort_by_motif_start_end(samples, motif_types, motif_len=2):
 	label too. 
 	"""
 	sorted_samples = {
-		motif: {'pre': {0:[],1:[]}, 'post': {0:[],1:[]}} for motif in motif_types
+		motif: {'pre': {0:[],1:[]}, 'post': {0:[],1:[]}, 'both': {0:[],1:[]}} for motif in motif_types
 	}
 	
 	for i,s in tqdm(samples.iterrows(), total=len(samples)):
@@ -21,7 +21,7 @@ def sort_by_motif_start_end(samples, motif_types, motif_len=2):
 		str_end = s['str_seq'][-motif_len:]
 		sorted_samples[str_start]['pre'][s.label].append(s)
 		sorted_samples[str_end]['post'][s.label].append(s)
-	
+
 	return sorted_samples
 
 
@@ -34,7 +34,7 @@ if __name__ == '__main__':
 	# options
 	label_version = 'mfr0_005'
 	save_dir = 'fasta_files'
-	window_size = 15
+	window_size = 64
 	inc_STR_cn = 0 #  number of STR copies to include in FASTA
 	inc_STR_dummies = False # if included STR bp should be represented as 'XY' instead of real bases
 

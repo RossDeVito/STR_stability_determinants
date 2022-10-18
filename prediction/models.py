@@ -7,7 +7,7 @@ import pytorch_lightning as pl
 from torch.nn.modules import flatten
 
 from torchmetrics import MetricCollection
-from torchmetrics import ConfusionMatrix, Precision, Recall, F1
+from torchmetrics import ConfusionMatrix, Precision, Recall, F1Score
 from torchmetrics import MeanSquaredError, R2Score
 
 from cnn_models import *
@@ -36,7 +36,7 @@ class STRPrePostClassifier(pl.LightningModule):
 		metrics = MetricCollection([
 			Precision(num_classes=2, average='macro', multiclass=True),
 			Recall(num_classes=2, average='macro', multiclass=True),
-			F1(num_classes=2, average='macro', multiclass=True),
+			F1Score(num_classes=2, average='macro', multiclass=True),
 		])
 		self.train_metrics = metrics.clone(prefix='train_')
 		self.val_metrics = metrics.clone(prefix='val_')

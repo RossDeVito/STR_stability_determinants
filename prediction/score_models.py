@@ -9,7 +9,9 @@ import pandas as pd
 import torch
 import pytorch_lightning as pl
 from torchmetrics import MetricCollection
-from torchmetrics import ConfusionMatrix, Precision, Recall, F1, PrecisionRecallCurve
+from torchmetrics import (
+	ConfusionMatrix, Precision, Recall, F1Score, PrecisionRecallCurve
+)
 from sklearn.metrics import roc_curve, auc, precision_recall_curve
 
 from model_utils import count_params
@@ -39,12 +41,16 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 		window_size=model_params['window_size'],
 		min_copy_num=model_params['min_copy_number'],
 		max_copy_num=model_params['max_copy_number'],
-		bp_dist_units=model_params['bp_dist_units']
+		bp_dist_units=model_params['bp_dist_units'],
+		return_STR_len='_STR_len' in model_params['model_type']
 	)
 	data_module.setup()
 
 	# Create model
 	if model_params['model_type'] == 'InceptionPrePostModel':
+		kwargs = {}
+		if 'pool_type' in model_params:
+			kwargs['pool_type'] = model_params['pool_type']
 		net = prepost_models.InceptionPrePostModel(
 			in_channels=data_module.num_feat_channels(),
 			depth_fe=model_params['depth_fe'],
@@ -53,7 +59,8 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 			n_filters_pred=model_params['n_filters_pred'],
 			kernel_sizes=model_params['kernel_sizes'],
 			activation=model_params['activation'],
-			dropout=model_params['dropout']
+			dropout=model_params['dropout'],
+			**kwargs
 		)
 	elif model_params['model_type'] == 'InceptionPreDimRedPost':
 		net = prepost_models.InceptionPreDimRedPost(
@@ -70,6 +77,19 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 			dropout_cnn=model_params['dropout'],
 			dropout_dense=model_params['dropout_dense'],
 			dense_layer_sizes=model_params['dense_layer_sizes']
+		)
+	elif model_params['model_type'] == 'InceptionPrePostModel_STR_len':
+		net = prepost_models.InceptionPrePostModelSTRLen(
+			in_channels=data_module.num_feat_channels(),
+			depth_fe=model_params['depth_fe'],
+			n_filters_fe=model_params['n_filters_fe'],
+			depth_pred=model_params['depth_pred'],
+			n_filters_pred=model_params['n_filters_pred'],
+			kernel_sizes=model_params['kernel_sizes'],
+			activation=model_params['activation'],
+			dropout=model_params['dropout'],
+			dense_dropout=model_params['dropout_dense'],
+			dense_layers=model_params['dense_layer_sizes']
 		)
 	else:
 		raise ValueError("Unknown model type: {}".format(model_params['model_type']))
@@ -97,10 +117,16 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 		output_dir, task_version_dir, model_dir, 'checkpoints', weights_file
 	)
 
-	model = models.STRPrePostClassifier.load_from_checkpoint(
-		weights_path,
-		model=net,
-	)
+	if '_STR_len' not in model_params['model_type']:
+		model = models.STRPrePostClassifier.load_from_checkpoint(
+			weights_path,
+			model=net,
+		)
+	else:
+		model = models.STRPrePostClassifierSTRLen.load_from_checkpoint(
+			weights_path,
+			model=net,
+		)
 
 	# Metrics
 	metrics = MetricCollection({
@@ -108,8 +134,8 @@ def score_model(output_dir, task_version_dir, model_dir, data_path,
 		'class_precision': Precision(num_classes=2, average='none', multiclass=True),
 		'macro_recall': Recall(num_classes=2, average='macro', multiclass=True),
 		'class_recall': Recall(num_classes=2, average='none', multiclass=True),
-		'macro_F1': F1(num_classes=2, average='macro', multiclass=True),
-		'class_F1': F1(num_classes=2, average='none', multiclass=True),
+		'macro_F1': F1Score(num_classes=2, average='macro', multiclass=True),
+		'class_F1': F1Score(num_classes=2, average='none', multiclass=True),
 		'confusion_matrix': ConfusionMatrix(num_classes=2)
 	})
 
@@ -185,6 +211,7 @@ if __name__ == '__main__':
 	task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
 	# task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
 	model_dirs = [
+		'tscc_version_10',
 		# 'version_0',
 		# 'version_1',
 		# 'version_2',
@@ -195,11 +222,13 @@ if __name__ == '__main__':
 		# 'version_7',
 		# 'version_8', 
 		# 'version_9',
-		'version_10',
-		'version_11',
-		'version_12',
-		'version_13',
-		'version_14',
+		# 'version_10',
+		# 'version_11',
+		# 'version_12',
+		# 'version_13',
+		# 'version_14',
+		# 'version_20',
+		# 'version_21'
 	]
 
 	# whether to use best val loss or last epoch

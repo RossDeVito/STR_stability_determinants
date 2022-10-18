@@ -204,7 +204,7 @@ if __name__ == '__main__':
 	# Options
 	label_version_dir = os.path.join(
 		'find_patterns_output',
-		'mfr0_005_mnc2000-m50',
+		'mfr0_005_mnc2000-m64',
 		# 'mfr0_0025_mnc2000-m50',
 		# 'mfr0_0_mnc2000-m64'
 	)

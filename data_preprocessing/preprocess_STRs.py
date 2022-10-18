@@ -108,7 +108,7 @@ if __name__ == '__main__':
 	min_num_called = 2000
 	motif_types = ['GT', 'TG', 'CT', 'TC', 'AC', 'CA', 'AT', 'TA', 'AG', 'GA']
 	stable_minor_freq_max = 0.0
-	unstable_minor_freq_min = 0.0
+	unstable_minor_freq_min = 0.005
 
 	if this_sample_set_fname is None:
 		this_sample_set_fname = 'sample_data_dinucleotide_mfr{:}_{:}_mnc{:}.json'.format(
@@ -129,6 +129,10 @@ if __name__ == '__main__':
 	# Filter samples, then save formatted data
 	for i in tqdm(range(len(samples)), file=sys.stdout):
 		samp_dict = samples.pop(0)
+
+		# Filter out STRs with a 'W' in the sequence
+		if 'W' in samp_dict['full_seq']:
+			continue
 
 		# filter out by STR motif type
 		if samp_dict['motif'] not in motif_types:
@@ -203,3 +207,4 @@ if __name__ == '__main__':
 	save_path = os.path.join(save_dir, this_sample_set_fname)
 
 	samp_df.to_json(save_path, orient='records', indent=4)
+	samp_df.to_csv(save_path.replace('.json', '.csv'), index=False)

@@ -9,9 +9,10 @@ if __name__ == '__main__':
 	# Load data
 	data_path = os.path.join(
 		'find_patterns_output', 
-		'mfr0_005_mnc2000-m50',
+		'mfr0_0_mnc2000-m64',
+		'correlations_ACGT_cases1-2-5_d0-1-2_lens13-15-20-25.csv'
 		# 'correlations_ACGT_cases1-2-5_d0-1-2_lens12-13-14-15-20.csv'
-		'correlations_by_motif_cases1-2-3-4-5-6_d0-1_lens13-15-20-25.csv'
+		# 'correlations_by_motif_cases1-2-3-4-5-6_d0-1_lens13-15-20-25.csv'
 	)
 	df = pd.read_csv(data_path)
 	df = df[df['feature'] == 'num. bases'].sort_values(
@@ -31,78 +32,117 @@ if __name__ == '__main__':
 
 	# Subset actual top params
 	param_sets = [
-	# {
-	# 	'case': 5,
-	# 	'd': 0,
-	# 	'agg_method': 'sum',
-	# 	'max_str_len': 15,
-	# }, {
-	# 	'case': 5,
-	# 	'd': 0,
-	# 	'agg_method': 'sum',
-	# 	'max_str_len': 13,
-	# }, {
-	# 	'case': 1,
-	# 	'd': 0,
-	# 	'agg_method': 'sum',
-	# 	'max_str_len': 13,
-	# }, {
-	# 	'case': 1,
-	# 	'd': 0,
-	# 	'agg_method': 'sum',
-	# 	'max_str_len': 15,
-	# }, {
-	# 	'case': 2,
-	# 	'd': 1,
-	# 	'agg_method': 'sum',
-	# 	'max_str_len': 13,
-	# }, {
-	# 	'case': 2,
-	# 	'd': 1,
-	# 	'agg_method': 'sum',
-	# 	'max_str_len': 15,
-	# }, 
 	{
-		'case': 3,
-		'd': 1,
-		'agg_method': 'sum',
-		'max_str_len': 13,
-	}, {
-		'case': 3,
-		'd': 1,
+		'case': 5,
+		'd': 0,
 		'agg_method': 'sum',
 		'max_str_len': 15,
-	}, {
-		'case': 3,
+	}, 
+	{
+		'case': 5,
+		'd': 0,
+		'agg_method': 'sum',
+		'max_str_len': 13,
+	}, 
+	{
+		'case': 1,
+		'd': 0,
+		'agg_method': 'sum',
+		'max_str_len': 13,
+	}, 
+	{
+		'case': 1,
+		'd': 0,
+		'agg_method': 'sum',
+		'max_str_len': 15,
+	},
+	{
+		'case': 2,
 		'd': 0,
 		'agg_method': 'sum',
 		'max_str_len': 13,
 	}, {
-		'case': 3,
+		'case': 2,
 		'd': 0,
 		'agg_method': 'sum',
 		'max_str_len': 15,
-	}, {
-		'case': 4,
-		'd': 1,
-		'agg_method': 'sum',
-		'max_str_len': 13,
-	}, {
-		'case': 4,
+	}, 
+	{
+		'case': 5,
 		'd': 1,
 		'agg_method': 'sum',
 		'max_str_len': 15,
-	}, {
-		'case': 6,
+	}, 
+	{
+		'case': 5,
 		'd': 1,
 		'agg_method': 'sum',
 		'max_str_len': 13,
-	}, {
-		'case': 6,
+	}, 
+	{
+		'case': 1,
+		'd': 1,
+		'agg_method': 'sum',
+		'max_str_len': 13,
+	}, 
+	{
+		'case': 1,
 		'd': 1,
 		'agg_method': 'sum',
 		'max_str_len': 15,
 	},
+	{
+		'case': 2,
+		'd': 1,
+		'agg_method': 'sum',
+		'max_str_len': 13,
+	}, {
+		'case': 2,
+		'd': 1,
+		'agg_method': 'sum',
+		'max_str_len': 15,
+	},
+	# {
+	# 	'case': 3,
+	# 	'd': 1,
+	# 	'agg_method': 'sum',
+	# 	'max_str_len': 13,
+	# }, {
+	# 	'case': 3,
+	# 	'd': 1,
+	# 	'agg_method': 'sum',
+	# 	'max_str_len': 15,
+	# }, {
+	# 	'case': 3,
+	# 	'd': 0,
+	# 	'agg_method': 'sum',
+	# 	'max_str_len': 13,
+	# }, {
+	# 	'case': 3,
+	# 	'd': 0,
+	# 	'agg_method': 'sum',
+	# 	'max_str_len': 15,
+	# }, {
+	# 	'case': 4,
+	# 	'd': 1,
+	# 	'agg_method': 'sum',
+	# 	'max_str_len': 13,
+	# }, {
+	# 	'case': 4,
+	# 	'd': 1,
+	# 	'agg_method': 'sum',
+	# 	'max_str_len': 15,
+	# }, {
+	# 	'case': 6,
+	# 	'd': 1,
+	# 	'agg_method': 'sum',
+	# 	'max_str_len': 13,
+	# }, {
+	# 	'case': 6,
+	# 	'd': 1,
+	# 	'agg_method': 'sum',
+	# 	'max_str_len': 15,
+	# },
 	]
 
 	subsets = []

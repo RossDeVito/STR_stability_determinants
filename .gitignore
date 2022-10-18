@@ -3,7 +3,12 @@ data/human-references/*
 !data/human-references/README.md 
 data/heterozygosity/*.json
 data/heterozygosity/*.tab
+data/heterozygosity/*.csv
+data/heterozygosity/freqs_by_chr/*.tab
 data/heterozygosity/*.zip
+data/heterozygosity_old/*.json
+data/heterozygosity_old/*.tab
+data/heterozygosity_old/*.zip
 
 prediction/training_output/*
 prediction/lightning_logs/*

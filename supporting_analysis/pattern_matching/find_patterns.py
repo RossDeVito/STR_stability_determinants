@@ -189,7 +189,7 @@ if __name__ == '__main__':
 	training_params = {
 		# Data File
 		'data_dir': os.path.join('..', 'data', 'heterozygosity'),
-		'data_fname': 'sample_data_dinucleotide_mfr0_0_mnc2000.json',
+		'data_fname': 'sample_data_dinucleotide_mfr0_005_mnc2000.json',
 
 		# Data Module
 		'min_copy_number': None,

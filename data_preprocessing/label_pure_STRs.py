@@ -39,7 +39,7 @@ if __name__ == '__main__':
 	'''
 	data_dir = os.path.join('..', 'data', 'heterozygosity')
 	unlabeled_samp_fname = 'unlabeled_samples_dinucleotide_GRCh38_500_per_side.json'
-	statSTR_data_fname = 'statSTR_merged_all_4_11.tab'
+	statSTR_data_fname = 'freqs_merged.tab'
 	output_json_fname = 'labeled_samples_dinucleotide.json'
 	remove_impure_repeats = True
 
@@ -109,11 +109,13 @@ if __name__ == '__main__':
 			samp['entropy'] = float(chrom_dfs[chrom].iloc[range_ind].entropy)
 			samp['num_called'] = int(chrom_dfs[chrom].iloc[range_ind].numcalled)
 
-			acounts = chrom_dfs[chrom].iloc[range_ind].acount.values[0].split(',')
-			counts = np.array([int(c.split(':')[1]) for c in acounts])
-			freqs = counts / counts.sum()
+			# acounts = chrom_dfs[chrom].iloc[range_ind].acount.values[0].split(',')
+			# counts = np.array([int(c.split(':')[1]) for c in acounts])
+			afreqs = chrom_dfs[chrom].iloc[range_ind].afreq.values[0].split(',')
+			freqs = np.array([float(c.split(':')[1]) for c in afreqs])
+
 			samp['minor_freq'] = float(1 - freqs.max())
-			samp['minor_count'] = int(counts.sum() - counts.max())
+			samp['minor_count'] = int(samp['minor_freq'] * samp['num_called'])
 
 			new_samples.append(samp)
 			n_called.append(samp['num_called'])

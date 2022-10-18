@@ -246,20 +246,20 @@ def get_subset_plot_matrices(subset_data, pattern, n_per_side, str_pad_size,
 
 if __name__ == '__main__':
 	# Options
-	attrs_dir = 'attr_data'
+	attrs_dir = '../prediction/training_output'
 	label_version = [
 		'v1-mfr0_005_mnc2000-m6_5',
-		'v1-mfr0_0025_mnc2000-m5_5'
+		'v1-mfr0_0025_mnc2000-m7_5'
 	][0]
-	model_version = 'version_10'
-	attr_file = 'ig_global_train_val_test.pkl'
+	model_version = 'tscc_version_0'
+	attr_file = 'ig_global_val_test.pkl'
 
 	save_fig = True
 	show_fig = False
 	flip_attr_plot_so_pos_label_up = False
 
 	str_motif_len = 2
-	str_pad_size = 6
+	str_pad_size = 4
 
 	n_per_side = 24
 
@@ -319,15 +319,18 @@ if __name__ == '__main__':
 	all_res = dict()			
 
 	for start_pattern in tqdm(starts_to_plot, desc='data preprocessing'):
-		plot_title = 'Pre-{}'.format(start_pattern)
-		print(plot_title)
-		all_res[plot_title] = []
-
 		# subset data
 		subset_data = subset_attr_data(
 			attr_data,
 			STR_starts == start_pattern
 		)
+		
+		plot_title = 'Pre-{} (n = {})'.format(
+			start_pattern, len(subset_data['labels'])
+		)
+		print(plot_title)
+		all_res[plot_title] = []
+
 		res, base_probs = get_subset_plot_matrices(
 			subset_data,
 			pattern=start_pattern,
@@ -461,7 +464,11 @@ if __name__ == '__main__':
 		plt.tight_layout(h_pad=0.35)
 
 		if save_fig:
-			plot_save_dir = os.path.join('plots_min_adj_seq_centattr', pattern)
+			plot_save_dir = os.path.join(
+				'plots_min_adj_seq_centattr', 
+				model_version,
+				# pattern.replace(' ', '')
+			)
 			if not os.path.exists(plot_save_dir):
 				os.makedirs(plot_save_dir)
 

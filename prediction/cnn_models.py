@@ -407,7 +407,7 @@ class InceptionTime(nn.Module):
 	"""InceptionTime"""
 	def __init__(self, in_channels=7, output_dim=1, 
 					kernel_sizes=[9, 19, 39], n_filters=32,
-					dropout=.3, activation='relu',
+					dropout=.3, activation='relu', pool_type='max',
 					**kwargs):
 		super().__init__()
 		self.in_channels = in_channels
@@ -416,6 +416,7 @@ class InceptionTime(nn.Module):
 		self.n_filters = n_filters
 		self.dropout = dropout
 		self.activation = activation
+		self.pool_type = pool_type
 		
 		self.inception_block = InceptionBlock(
 			in_channels=self.in_channels,
@@ -425,7 +426,11 @@ class InceptionTime(nn.Module):
 			activation=self.activation,
 			**kwargs
 		)
-		self.global_pool = nn.AdaptiveMaxPool1d(1)
+
+		if self.pool_type == 'max':
+			self.global_pool = nn.AdaptiveMaxPool1d(1)
+		if self.pool_type == 'avg':
+			self.global_pool = nn.AdaptiveAvgPool1d(1)
 		self.flatten = nn.Flatten()
 		self.fc = nn.Linear(
 			(len(self.kernel_sizes)+1) * self.n_filters, 

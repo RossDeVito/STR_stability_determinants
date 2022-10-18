@@ -49,16 +49,22 @@ def plot_heatmap(pre_mat, post_mat, pre_str, post_str,
 
 def plot_heatmap_in_axs(pre_mat, post_mat, axs, 
 		pre_str=None, post_str=None, desc=None, label=None, 
-		pred=None, cmap='PRGn'):
+		pred=None, cmap='PRGn', just_bases=False):
 	max_attr = max(pre_mat.max(), post_mat.max())
 	min_attr = min(pre_mat.min(), post_mat.min())
 
+	if just_bases:
+		pre_mat = pre_mat[:4]
+		post_mat = post_mat[:4]
+		y_ticklabels = ['A', 'C', 'G', 'T']
+	else:
+		y_ticklabels = ['A', 'C', 'G', 'T', 'distance', 'is_STR']
 	sns.heatmap(
 		data=pre_mat,
 		vmin=min_attr,
 		vmax=max_attr,
 		center=0,
-		yticklabels=['A', 'C', 'G', 'T', 'distance', 'is_STR'],
+		yticklabels=y_ticklabels,
 		xticklabels=[],
 		ax=axs[0],
 		cmap=cmap,
@@ -69,7 +75,7 @@ def plot_heatmap_in_axs(pre_mat, post_mat, axs,
 		vmin=min_attr,
 		vmax=max_attr,
 		center=0,
-		yticklabels=['A', 'C', 'G', 'T', 'distance', 'is_STR'],
+		yticklabels=y_ticklabels,
 		xticklabels=[],
 		ax=axs[1],
 		cmap=cmap,
@@ -131,23 +137,22 @@ def subset_attr_data(attr_data, subset_mask):
 
 if __name__ == '__main__':
 	# Options
-	attrs_dir = 'attr_data'
+	attrs_dir = '../prediction/training_output'
 	label_version = [
 		'v1-mfr0_005_mnc2000-m6_5',
 		'v1-mfr0_0025_mnc2000-m7_5'
 	][0]
-	model_version = 'version_10'
-	attr_file = 'ig_global_train_val_test.pkl'
+	model_version = 'tscc_version_6'
+	attr_file = 'ig_global_val_test.pkl'
 
-	top_n = 20
+	top_n = 100
 	save_plots = True
 	show_plots = False
 	str_motif_len = 2
-	str_pad_size = 6
+	str_pad_size = 4
 
 	test_only = True
-
-	num_cpus = 10
+	just_bases = True
 
 	# Load single attr type
 	attr_data = pd.read_pickle(os.path.join(
@@ -209,7 +214,8 @@ if __name__ == '__main__':
 				subset_data['pre'][ind],
 				subset_data['post'][ind],
 				axs[plot_ind],
-				ind
+				ind,
+				just_bases=just_bases
 			)
 		fig.suptitle(
 			'Top {} TPs for motif {}'.format(top_n, motif),
@@ -258,7 +264,8 @@ if __name__ == '__main__':
 				subset_data['pre'][ind],
 				subset_data['post'][ind],
 				axs[plot_ind],
-				ind
+				ind,
+				just_bases=just_bases
 			)
 		fig.suptitle(
 			'Top {} TNs for motif {}'.format(top_n, motif),
@@ -266,13 +273,17 @@ if __name__ == '__main__':
 			size='xx-large')
 		plt.tight_layout()
 	
+		top_n_str = str(top_n)
+		# if just_bases:
+		# 	top_n_str += '_bases'
+			
 		if save_plots:
 			if test_only:
 				plt.savefig(
 					os.path.join(
 						plot_save_dir, 
 						'{}_TNs_top_{}_{}.png'.format(
-							motif, top_n, 'TEST')
+							motif, top_n_str, 'TEST')
 					)
 				)
 			else:
@@ -280,7 +291,7 @@ if __name__ == '__main__':
 					os.path.join(
 						plot_save_dir, 
 						'{}_TNs_top_{}_{}.png'.format(
-							motif, top_n, attr_file.split('.')[0])
+							motif, top_n_str, attr_file.split('.')[0])
 					)
 				)
 		if show_plots:

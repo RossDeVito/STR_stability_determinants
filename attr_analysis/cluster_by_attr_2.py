@@ -159,20 +159,20 @@ if __name__ == '__main__':
 			seperating groups before clustering.
 	"""
 	# Options
-	attrs_dir = 'attr_data'
+	attrs_dir = '../prediction/training_output'
 	label_version = [
 		'v1-mfr0_005_mnc2000-m6_5',
-		'v1-mfr0_0025_mnc2000-m5_5'
+		'v1-mfr0_0025_mnc2000-m7_5'
 	][0]
-	model_version = 'version_10'
-	attr_file = 'ig_global_train_val_test.pkl'
+	model_version = 'tscc_version_0'
+	attr_file = 'ig_global_val_test.pkl'
 
 	str_motif_len = 2
-	str_pad_size = 6
+	str_pad_size = 4
 
 	n_per_side = 15
 
-	use_TP_TN = True
+	use_TP_TN = False
 
 	cluster_metric = 'l1'
 	cluster_method = 'hdbscan'
@@ -181,9 +181,9 @@ if __name__ == '__main__':
 		'min_samples': 40,
 	}
 	hdbscan_params = {
-		'min_cluster_size': 35,
-		'min_samples': 2,
-		'cluster_selection_epsilon': 0.005,
+		'min_cluster_size': 10,
+		'min_samples': 3,
+		'cluster_selection_epsilon': 0.0,
 		'alpha': 1.
 	}
 
@@ -282,7 +282,9 @@ if __name__ == '__main__':
 
 	# Create dir to save cluster results
 	if cluster_method == 'dbscan':
-		cluster_details_str = '_'.join([dbscan_params['eps'], dbscan_params['min_samples']])
+		cluster_details_str = '_'.join(
+			str(v) for v in [dbscan_params['eps'], dbscan_params['min_samples']]
+		)
 	elif cluster_method == 'hdbscan':
 		cluster_details_str = '_'.join([
 			str(hdbscan_params['min_cluster_size']),

@@ -10,7 +10,8 @@ import seaborn as sns
 if __name__ == '__main__':
 	# Options
 	max_STR_lens = [13, 15, 25]
-	to_plot = ['point-biserial', 'rank-biserial']#, 'heterozygosity']
+	to_plot = ['point-biserial', 'rank-biserial', 'Spearman']
+	label_type = ['binary label', 'heterozygosity'] # 'entropy
 	feats_to_plot = [	# Tuples formated (display_name, options_dict)
 		('STR length', {'is_STR_len': True}),
 		('Adj. dinucleotide\n repeat', {'case': 1, 'd': 0, 'agg_method': 'sum'}),
@@ -20,15 +21,15 @@ if __name__ == '__main__':
 	p_val_threshold = 1e-8
 
 	# Load data
-	corr_dir = os.path.join('find_patterns_output', 'mfr0_005_mnc2000-m50')
+	corr_dir = os.path.join('find_patterns_output', 'mfr0_005_mnc2000-m64')
 	corr_fname = 'correlations_ACGT_cases1-2-5_d0-1-2_lens13-15-20-25.csv'
-	corr_by_motif_fname = 'correlations_by_motif_cases1-2-5_d0-1_lens13-15-20-25.csv'
+	corr_by_motif_fname = 'correlations_by_motif_cases1-2-3-4-5-6_d0-1_lens13-15-20-25.csv'
 
 	df = pd.read_csv(os.path.join(corr_dir, corr_fname)).drop(columns='X_bases')
 	df['motif'] = 'all'
 	motif_df = pd.read_csv(os.path.join(corr_dir, corr_by_motif_fname))
 	df = pd.concat([df, motif_df])
-	df = df.dropna().reset_index(drop=True)
+	df = df[df.label.isin(label_type)].dropna().reset_index(drop=True)
 
 	# Remove duplicate tests on complements
 	all_motif_types = ['AC/GT', 'AG/CT', 'AT', 'all']
@@ -70,15 +71,15 @@ if __name__ == '__main__':
 
 			for feat_name, feat_options in feats_to_plot:
 				if 'is_STR_len' in feat_options:
-					feat_df = reduced_df[reduced_df['feature'] == 'STR len.']
+					feat_df = reduced_df.loc[reduced_df['feature'] == 'STR len.']
 				else:
-					feat_df = reduced_df[
+					feat_df = reduced_df.loc[
 						(reduced_df['case'] == feat_options['case'])
 						& (reduced_df['d'] == feat_options['d'])
 						& (reduced_df['agg_method'] == feat_options['agg_method'])
 						& (reduced_df['feature'] == 'num. bases')
 					]
-				feat_df['Feature'] = feat_name
+				feat_df.loc[:, 'Feature'] = feat_name
 				rows_by_feat.append(feat_df)
 			
 			reduced_df = pd.concat(rows_by_feat)

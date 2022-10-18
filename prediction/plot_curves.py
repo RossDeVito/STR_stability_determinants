@@ -12,8 +12,9 @@ import seaborn as sns
 
 if __name__ == '__main__':
 	save_output = True
-	save_desc = '0_1_2_3_4_5_6_7_8_9_10_11_12_13_14' # if None will name with timestamp int
+	# save_desc = '0_1_2_3_4_5_6_7_8_9_10_11_12_13_14' # if None will name with timestamp int
 	# save_desc = '3_4_5_7_9'
+	save_desc = '10_and_wlen_20_21'
 
 	trained_res_dir = os.path.join(
 		'training_output',
@@ -21,80 +22,97 @@ if __name__ == '__main__':
 		# 'v1-mfr0_0025_mnc2000-m7_5'
 	)
 
+	# models_to_plot = [
+	# 	{
+	# 		'name': 'version_0',
+	# 		'path': 'version_0',
+	# 		'which_res': 'all'
+	# 	},
+	# 	{
+	# 		'name': 'version_1',
+	# 		'path': 'version_1',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_2',
+	# 		'path': 'version_2',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_3',
+	# 		'path': 'version_3',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_4',
+	# 		'path': 'version_4',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_5',
+	# 		'path': 'version_5',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_6',
+	# 		'path': 'version_6',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_7',
+	# 		'path': 'version_7',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_8',
+	# 		'path': 'version_8',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_9',
+	# 		'path': 'version_9',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_10',
+	# 		'path': 'version_10',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_11',
+	# 		'path': 'version_11',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_12',
+	# 		'path': 'version_12',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_13',
+	# 		'path': 'version_13',
+	# 		'which_res': 'best'
+	# 	},
+	# 	{
+	# 		'name': 'version_14',
+	# 		'path': 'version_14',
+	# 		'which_res': 'best'
+	# 	},
+	# ]
 	models_to_plot = [
 		{
-			'name': 'version_0',
-			'path': 'version_0',
-			'which_res': 'all'
-		},
-		{
-			'name': 'version_1',
-			'path': 'version_1',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_2',
-			'path': 'version_2',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_3',
-			'path': 'version_3',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_4',
-			'path': 'version_4',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_5',
-			'path': 'version_5',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_6',
-			'path': 'version_6',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_7',
-			'path': 'version_7',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_8',
-			'path': 'version_8',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_9',
-			'path': 'version_9',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_10',
+			'name': 'Blinded Model',
 			'path': 'version_10',
 			'which_res': 'best'
 		},
 		{
-			'name': 'version_11',
-			'path': 'version_11',
+			'name': 'Model with STR Length (20)',
+			'path': 'version_20',
 			'which_res': 'best'
 		},
 		{
-			'name': 'version_12',
-			'path': 'version_12',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_13',
-			'path': 'version_13',
-			'which_res': 'best'
-		},
-		{
-			'name': 'version_14',
-			'path': 'version_14',
+			'name': 'Model with STR Length (21)',
+			'path': 'version_21',
 			'which_res': 'best'
 		},
 	]

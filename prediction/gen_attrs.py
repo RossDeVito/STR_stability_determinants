@@ -32,7 +32,7 @@ if __name__ == '__main__':
 	output_dir = 'training_output'
 	task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
 	# task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
-	model_dir = 'version_10'
+	model_dir = 'tscc_version_10'
 	trained_res_dir = os.path.join(output_dir, task_version_dir, model_dir)
 
 	# whether to use best val loss or last epoch
@@ -65,6 +65,9 @@ if __name__ == '__main__':
 
 	# Create model
 	if model_params['model_type'] == 'InceptionPrePostModel':
+		kwargs = {}
+		if 'pool_type' in model_params:
+			kwargs['pool_type'] = model_params['pool_type']
 		net = prepost_models.InceptionPrePostModel(
 			in_channels=data_module.num_feat_channels(),
 			depth_fe=model_params['depth_fe'],
@@ -73,7 +76,8 @@ if __name__ == '__main__':
 			n_filters_pred=model_params['n_filters_pred'],
 			kernel_sizes=model_params['kernel_sizes'],
 			activation=model_params['activation'],
-			dropout=model_params['dropout']
+			dropout=model_params['dropout'],
+			**kwargs
 		)
 	elif model_params['model_type'] == 'InceptionPreDimRedPost':
 		net = prepost_models.InceptionPreDimRedPost(
@@ -136,7 +140,7 @@ if __name__ == '__main__':
 	}
 	data_splits = [
 		# 'train',
-		# 'val',
+		'val',
 		'test',
 	]
 	attrs_dict = dict()

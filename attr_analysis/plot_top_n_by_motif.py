@@ -140,9 +140,9 @@ if __name__ == '__main__':
 	attrs_dir = '../prediction/training_output'
 	label_version = [
 		'v1-mfr0_005_mnc2000-m6_5',
-		'v1-mfr0_0025_mnc2000-m7_5'
-	][0]
-	model_version = 'tscc_version_6'
+		'v1-mfr0_005_mnc2000-m7_5'
+	][1]
+	model_version = 'tscc_version_1'
 	attr_file = 'ig_global_val_test.pkl'
 
 	top_n = 100

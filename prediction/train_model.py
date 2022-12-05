@@ -195,7 +195,7 @@ def main(training_params):
 		trainer = pl.Trainer(
 			callbacks=callbacks,
 			logger=tb_logger,
-			gpus=num_gpus, 
+			# gpus=num_gpus, 
 			log_every_n_steps=1, 
 			resume_from_checkpoint=checkpoint_path
 		)

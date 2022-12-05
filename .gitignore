@@ -6,9 +6,17 @@ data/heterozygosity/*.tab
 data/heterozygosity/*.csv
 data/heterozygosity/freqs_by_chr/*.tab
 data/heterozygosity/*.zip
-data/heterozygosity_old/*.json
-data/heterozygosity_old/*.tab
-data/heterozygosity_old/*.zip
+data/heterozygosity_old
+data/heterozygosity_old_v2
+data/heterozygosity_old*/*.json
+data/heterozygosity_old*/*.tab
+data/heterozygosity_old*/*.zip
+
+data/heterozygosity_v12_22/*.json
+data/heterozygosity_v12_22/*.tab
+data/heterozygosity_v12_22/*.csv
+data/heterozygosity_v12_22/freqs_by_chr/*.tab
+data/heterozygosity_v12_22/*.zip
 
 prediction/training_output/*
 prediction/lightning_logs/*
@@ -18,6 +26,7 @@ attr_analysis/attr_data/*
 supporting_analysis/homer/fasta_files/*
 supporting_analysis/homer/homer_output/*
 supporting_analysis/pattern_matching/find_patterns_output/*
+supporting_analysis/all_corrs_w_len/data/*.csv
 
 .DS_Store
 .DS_Store/

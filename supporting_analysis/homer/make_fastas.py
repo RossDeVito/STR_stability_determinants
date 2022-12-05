@@ -26,10 +26,7 @@ def sort_by_motif_start_end(samples, motif_types, motif_len=2):
 
 
 if __name__ == '__main__':
-	max_copy_num_map = {
-		'mfr0_005': 6.5,
-		'mfr0_0025': 7.5,
-	}
+	max_copy_num = 6.5
 
 	# options
 	label_version = 'mfr0_005'
@@ -45,7 +42,7 @@ if __name__ == '__main__':
 
 		# Data Module
 		'min_copy_number': None,
-		'max_copy_number': max_copy_num_map[label_version],
+		'max_copy_number': max_copy_num,
 		'incl_STR_feat': True,
 		'min_boundary_STR_pos': 6,
 		'max_boundary_STR_pos': 6,

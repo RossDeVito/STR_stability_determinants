@@ -65,7 +65,7 @@ if __name__ == '__main__':
 	# sns.displot(np.log(hets), kde=True)
 	# plt.show()
 
-	# Get peak start and end locs by chromosome. Will be used to find 
+	# Get STR start and end locs by chromosome. Will be used to find 
 	# overlap with STR regions.
 	included_chroms = list(set(s['str_seq_name'].split(':')[0] for s in samples))
 

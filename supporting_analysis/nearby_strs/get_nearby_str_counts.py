@@ -13,8 +13,8 @@ from data_modules import STRDataset
 
 if __name__ == '__main__':
 	# options
-	window_size = 16
-	max_str_len = 20
+	window_size = 32
+	max_str_len = 15
 
 	training_params = {
 		# Data File

@@ -8,13 +8,13 @@ import seaborn as sns
 
 if __name__ == '__main__':
 	# Load labeled STRs to visualize
-	samp_dir = os.path.join('..', 'data', 'heterozygosity')
+	samp_dir = os.path.join('..', 'data', 'heterozygosity_v12_22_filtered')
 	samp_fname = 'labeled_samples_dinucleotide.json'
 	samp_path = os.path.join(samp_dir, samp_fname)
 	
 	show_plots = True
 	save_plots = True
-	save_dir = os.path.join('..', 'data', 'heterozygosity', 'plots')
+	save_dir = os.path.join(samp_dir, 'plots')
 
 	with open(samp_path) as fp:    
 		samples = json.load(fp)

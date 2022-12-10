@@ -99,12 +99,12 @@ if __name__ == '__main__':
 		unstable_minor_freq_min: Samples with a heterozygosity score > this 
 			will be labeled as 1.
 	"""
-	samp_dir = os.path.join('..', 'data', 'heterozygosity')
+	samp_dir = os.path.join('..', 'data', 'heterozygosity_v12_22_filtered')
 	samp_fname = 'labeled_samples_dinucleotide.json'
-	save_dir = os.path.join('..', 'data', 'heterozygosity')
+	save_dir = os.path.join('..', 'data', 'heterozygosity_v12_22_filtered')
 	this_sample_set_fname = None
 
-	max_STR_len = 64
+	max_STR_len = 60
 	min_num_called = 3000
 	motif_types = ['GT', 'TG', 'CT', 'TC', 'AC', 'CA', 'AT', 'TA', 'AG', 'GA']
 	stable_minor_freq_max = 0.0

@@ -37,7 +37,7 @@ if __name__ == '__main__':
 		unlabeled_samp_fname: name of unlabeled samples JSON file
 		statSTR_data_fname: name of statSTR output TAB file
 	'''
-	data_dir = os.path.join('..', 'data', 'heterozygosity')
+	data_dir = os.path.join('..', 'data', 'heterozygosity_v12_22_filtered')
 	unlabeled_samp_fname = 'unlabeled_samples_dinucleotide_GRCh38_500_per_side.json'
 	statSTR_data_fname = 'freqs_merged.tab'
 	output_json_fname = 'labeled_samples_dinucleotide.json'

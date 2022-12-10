@@ -33,7 +33,7 @@ if __name__ == '__main__':
 	ref_fasta_path = '../data/human-references/GRCh38_full_analysis_set_plus_decoy_hla.fa'
 	n_per_side = 500
 	output_json_fname = None
-	samples_save_dir = os.path.join('..', 'data', 'heterozygosity')
+	samples_save_dir = os.path.join('..', 'data', 'heterozygosity_v12_22_filtered')
 
 	# Load STR region BED
 	str_region_bed_path = os.path.join('..', 'data', 'HipSTR-references', 

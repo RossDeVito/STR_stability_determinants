@@ -12,11 +12,11 @@ data/heterozygosity_old*/*.json
 data/heterozygosity_old*/*.tab
 data/heterozygosity_old*/*.zip
 
-data/heterozygosity_v12_22/*.json
-data/heterozygosity_v12_22/*.tab
-data/heterozygosity_v12_22/*.csv
-data/heterozygosity_v12_22/freqs_by_chr/*.tab
-data/heterozygosity_v12_22/*.zip
+data/heterozygosity_v12_22*/*.json
+data/heterozygosity_v12_22*/*.tab
+data/heterozygosity_v12_22*/*.csv
+data/heterozygosity_v12_22*/freqs_by_chr/*.tab
+data/heterozygosity_v12_22*/*.zip
 
 prediction/training_output/*
 prediction/lightning_logs/*

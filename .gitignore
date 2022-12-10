@@ -19,6 +19,8 @@ data/heterozygosity_v12_22/freqs_by_chr/*.tab
 data/heterozygosity_v12_22/*.zip
 
 prediction/training_output/*
+prediction/training_output_old/*
+prediction/training_output_old_v2/*
 prediction/lightning_logs/*
 
 attr_analysis/attr_data/*

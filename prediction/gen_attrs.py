@@ -30,9 +30,9 @@ if __name__ == '__main__':
 
 	# Select model's output path
 	output_dir = 'training_output'
-	task_version_dir = 'v1-mfr0_005_mnc2000-m6_5'
+	task_version_dir = 'v1-mfr0_01_mnc3000-m8_5'
 	# task_version_dir = 'v1-mfr0_0025_mnc2000-m7_5'
-	model_dir = 'tscc_version_10'
+	model_dir = 'version_5'
 	trained_res_dir = os.path.join(output_dir, task_version_dir, model_dir)
 
 	# whether to use best val loss or last epoch
@@ -126,6 +126,8 @@ if __name__ == '__main__':
 	model.eval()
 	if num_gpus > 0:
 		model.cuda()
+
+	print("Loading complete", flush=True)
 
 	# Setup attr methods
 	attr_methods = {
@@ -281,6 +283,7 @@ if __name__ == '__main__':
 
 	# Save attributions with associated data as pickles
 	res_save_dir = os.path.join(trained_res_dir, 'attributions')
+	print(f"Results save dir: {res_save_dir}", flush=True)
 	if not os.path.exists(res_save_dir):
 		os.makedirs(res_save_dir)
 

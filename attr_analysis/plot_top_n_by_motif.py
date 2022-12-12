@@ -140,16 +140,17 @@ if __name__ == '__main__':
 	attrs_dir = '../prediction/training_output'
 	label_version = [
 		'v1-mfr0_005_mnc2000-m6_5',
-		'v1-mfr0_005_mnc2000-m7_5'
-	][1]
-	model_version = 'tscc_version_1'
+		'v1-mfr0_005_mnc2000-m7_5',
+		'v1-mfr0_01_mnc3000-m8_5'
+	][-1]
+	model_version = 'version_5'
 	attr_file = 'ig_global_val_test.pkl'
 
-	top_n = 100
+	top_n = 50
 	save_plots = True
 	show_plots = False
 	str_motif_len = 2
-	str_pad_size = 4
+	str_pad_size = 6
 
 	test_only = True
 	just_bases = True

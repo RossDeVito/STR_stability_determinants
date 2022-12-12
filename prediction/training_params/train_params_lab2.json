@@ -1,30 +1,30 @@
 {
-    "data_dir": "../data/heterozygosity_v12_22",
+    "data_dir": "../data/heterozygosity_v12_22_filtered",
     "data_fname": "sample_data_dinucleotide_mfr0_01_mnc3000.json",
-    "batch_size": 512,
+    "batch_size": 256,
     "min_copy_number": null,
-    "max_copy_number": 6.5,
+    "max_copy_number": 8.5,
     "incl_STR_feat": true,
     "min_boundary_STR_pos": 6,
     "max_boundary_STR_pos": 6,
     "window_size": 64,
     "bp_dist_units": 64.0,
     "split_name": "split_1",
-    "lr": 1e-06,
+    "lr": 1e-05,
     "reduce_lr_on_plateau": true,
     "reduce_lr_factor": 0.5,
-    "lr_reduce_patience": 7,
+    "lr_reduce_patience": 10,
     "pos_weight": null,
     "early_stopping_patience": 50,
     "model_type": "InceptionPrePostModel",
     "depth_fe": 0,
     "n_filters_fe": 32,
     "depth_pred": 6,
-    "n_filters_pred": 64,
+    "n_filters_pred": 48,
     "kernel_sizes": [
-        7, 11, 15
+        5, 9, 15
     ],
     "activation": "gelu",
 	"pool_type": "avg",
-    "dropout": 0.2
+    "dropout": 0.15
 }
